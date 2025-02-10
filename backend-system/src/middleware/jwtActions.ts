@@ -21,10 +21,12 @@ export const handleCreateToken = (payload: IPayloadJWT, expire: string): string 
     }
 };
 
-export const handleVerifyToken = (token: string): IPayloadJWT | null => {
+export const handleVerifyToken = (token: string, isExp?: boolean): IPayloadJWT | null => {
     try {
         let key: string = process.env.JWT_SECRET as string;
-        return jwt.verify(token, key) as IPayloadJWT;
+        return jwt.verify(token, key, {
+            ignoreExpiration: isExp ? isExp : false,
+        }) as IPayloadJWT;
     } catch (err) {
         console.log(err);
         return null;
@@ -32,7 +34,6 @@ export const handleVerifyToken = (token: string): IPayloadJWT | null => {
 };
 
 // USER
-
 export const handleCheckTokenUser = (req: Request, res: Response, next: NextFunction) => {
     try {
         if (!req.headers.authorization)
@@ -65,7 +66,6 @@ export const handleCheckTokenUser = (req: Request, res: Response, next: NextFunc
 };
 
 //ADMIN
-
 export const handleCheckTokenAdmin = (req: Request, res: Response, next: NextFunction) => {
     try {
         if (!req.headers.authorization)
@@ -87,6 +87,40 @@ export const handleCheckTokenAdmin = (req: Request, res: Response, next: NextFun
             next();
         } else {
             return res.status(403).json(ResponseHandler(httpStatus.FORBIDDEN, null, "your role aren't admin"));
+        }
+    } catch (err) {
+        console.log(err);
+        return res
+            .status(httpStatus.INTERNAL_SERVER_ERROR)
+            .json(ResponseHandler(httpStatus.INTERNAL_SERVER_ERROR, null, 'error from server'));
+    }
+};
+
+//ADMIN
+export const handleRefreshToken = (req: Request, res: Response, next: NextFunction) => {
+    try {
+        if (!req.headers.authorization)
+            return res
+                .status(httpStatus.UNAUTHORIZED)
+                .json(ResponseHandler(httpStatus.UNAUTHORIZED, null, 'token not found'));
+
+        const token = req.headers.authorization?.replace('Bearer', '').trim();
+        const refreshToken = req.body.refresh_token;
+        if (!refreshToken)
+            return res
+                .status(httpStatus.UNAUTHORIZED)
+                .json(ResponseHandler(httpStatus.UNAUTHORIZED, null, 'refresh token not found'));
+
+        let decodeAccess = handleVerifyToken(token, true);
+        let decodeRefresh = handleVerifyToken(refreshToken);
+
+        if (decodeAccess?.email === decodeRefresh?.email) {
+            req.body.email = decodeAccess?.email;
+            next();
+        } else {
+            return res
+                .status(403)
+                .json(ResponseHandler(httpStatus.FORBIDDEN, null, "refresh token and access token don't match"));
         }
     } catch (err) {
         console.log(err);

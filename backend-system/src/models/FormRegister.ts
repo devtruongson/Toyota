@@ -1,5 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../configs/connectDB';
+import User from './User';
 
 class FormRegister extends Model {}
 FormRegister.init(
@@ -20,7 +21,15 @@ FormRegister.init(
         note: {
             type: DataTypes.STRING,
             allowNull: false,
-            defaultValue: true,
+        },
+        time: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        status: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
         },
     },
     {
@@ -28,5 +37,16 @@ FormRegister.init(
         modelName: 'FormRegister',
     },
 );
+
+User.hasMany(FormRegister, {
+    foreignKey: 'user_id',
+    as: 'form_list',
+});
+
+FormRegister.belongsTo(User, {
+    foreignKey: 'user_id',
+    targetKey: 'id',
+    as: 'user_data',
+});
 
 export default FormRegister;

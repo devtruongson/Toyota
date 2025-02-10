@@ -67,6 +67,32 @@ class UserController {
                 .json(ResponseHandler(httpStatus.INTERNAL_SERVER_ERROR, null, 'error from server'));
         }
     }
+
+    async handleRefreshToken(req: Request, res: Response) {
+        try {
+            const email = req.body.email;
+            const data = await userService.refreshTokenService(email);
+            return res.status(httpStatus.OK).json(data);
+        } catch (err) {
+            console.log(err);
+            return res
+                .status(httpStatus.INTERNAL_SERVER_ERROR)
+                .json(ResponseHandler(httpStatus.INTERNAL_SERVER_ERROR, null, 'error from server'));
+        }
+    }
+
+    async getAllForm(req: Request, res: Response) {
+        try {
+            const email = req.body.token_author;
+            const data = await userService.getAllForm(email);
+            return res.status(httpStatus.OK).json(data);
+        } catch (err) {
+            console.log(err);
+            return res
+                .status(httpStatus.INTERNAL_SERVER_ERROR)
+                .json(ResponseHandler(httpStatus.INTERNAL_SERVER_ERROR, null, 'error from server'));
+        }
+    }
 }
 
 const userController = new UserController();

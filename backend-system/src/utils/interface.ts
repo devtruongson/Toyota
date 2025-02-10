@@ -19,4 +19,24 @@ export interface IUser {
     is_login_social: boolean;
     age: string;
     gender: boolean;
+    first_name: string;
+    last_name: string;
+}
+
+export interface ICar {
+    id: number;
+    title: string;
+    description: string;
+    weight: number;
+    model: string;
+    battery_capacity: string;
+    range_km?: string;
+    price?: string;
+    status?: string;
+}
+
+export interface IQueryForm {
+    status?: 'pending' | 'approved';
+    q?: string;
+    sort?: any;
 }
