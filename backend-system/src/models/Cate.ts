@@ -13,6 +13,11 @@ Cate.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        is_active: {
+            type: DataTypes.BOOLEAN,
+            allowNull: true,
+            defaultValue: true,
+        },
     },
     {
         sequelize,

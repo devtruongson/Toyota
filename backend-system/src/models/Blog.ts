@@ -10,6 +10,10 @@ Blog.init(
             primaryKey: true,
             autoIncrement: true,
         },
+        thumbnail: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
         title: {
             type: DataTypes.STRING,
             allowNull: false,

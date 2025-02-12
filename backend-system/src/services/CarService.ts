@@ -61,13 +61,18 @@ class CarService {
         }
     }
 
-    async handleGetAllCar(data: { page: number; pageSize: number; is_active: boolean }) {
+    async handleGetAllCar(data: { page: number; pageSize: number; is_active: boolean | null }) {
         try {
             let offset: number = (data.page - 1) * data.pageSize;
+            const options: any = {};
+
+            if (data.is_active !== null) {
+                options.is_active = data.is_active;
+            }
 
             let { count, rows }: { count: number; rows: any } = await Car.findAndCountAll({
                 where: {
-                    is_active: data.is_active,
+                    ...options,
                 },
                 include: [
                     {
@@ -130,6 +135,42 @@ class CarService {
                 },
             );
             return ResponseHandler(httpStatus.OK, dataUpdate, 'ok');
+        } catch (err) {
+            console.log(err);
+            Promise.reject(ResponseHandler(httpStatus.BAD_GATEWAY, null, 'có lỗi xảy ra!'));
+        }
+    }
+
+    async handleUpdateVisibleStatusImage(id: number, is_active: boolean) {
+        try {
+            if (!id) {
+                return ResponseHandler(httpStatus.BAD_REQUEST, null, 'BAD REQUEST MISSING PARM ID IMAGE');
+            }
+            const dataUpdate = await CarFeature.update(
+                {
+                    is_active: is_active,
+                },
+                {
+                    where: {
+                        id: id,
+                    },
+                },
+            );
+            return ResponseHandler(httpStatus.OK, dataUpdate, 'ok');
+        } catch (err) {
+            console.log(err);
+            Promise.reject(ResponseHandler(httpStatus.BAD_GATEWAY, null, 'có lỗi xảy ra!'));
+        }
+    }
+
+    async handleDeleteImageCar(id: number) {
+        try {
+            await CarFeature.destroy({
+                where: {
+                    id: id,
+                },
+            });
+            return ResponseHandler(httpStatus.OK, null, 'Delete Car Successfully');
         } catch (err) {
             console.log(err);
             Promise.reject(ResponseHandler(httpStatus.BAD_GATEWAY, null, 'có lỗi xảy ra!'));

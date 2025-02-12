@@ -18,7 +18,7 @@ Car.init(
             allowNull: false,
         },
         is_show_form: {
-            type: DataTypes.STRING,
+            type: DataTypes.BOOLEAN,
             allowNull: false,
         },
         description: {
@@ -49,6 +49,7 @@ Car.init(
             type: DataTypes.STRING,
             allowNull: true,
         },
+        // Có sẵn hàng hay không
         status: {
             type: DataTypes.STRING,
             allowNull: true,

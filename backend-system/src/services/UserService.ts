@@ -34,10 +34,9 @@ class UserService {
     async loginUser(body: loginDto) {
         try {
             const dataCheck = await this.checkUserExit(body.email, 'query');
-            if (typeof dataCheck !== 'object')
-                return Promise.reject(ResponseHandler(httpStatus.BAD_GATEWAY, null, 'có lỗi xảy ra!'));
+            if (typeof dataCheck !== 'object') return ResponseHandler(httpStatus.BAD_GATEWAY, null, 'có lỗi xảy ra!');
             if (!dataCheck.User) {
-                return Promise.reject(ResponseHandler(httpStatus.BAD_GATEWAY, null, 'có lỗi xảy ra!'));
+                return ResponseHandler(httpStatus.BAD_REQUEST, null, 'Account Does Not Exits!');
             }
 
             if (!dataCheck.isValid) {
@@ -143,8 +142,6 @@ class UserService {
                 attributes: {
                     exclude: ['password'],
                 },
-                raw: true,
-                nest: true,
             });
             if (!user) {
                 return ResponseHandler(httpStatus.BAD_REQUEST, {}, 'not found');

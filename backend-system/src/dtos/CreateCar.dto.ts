@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateCarDTO {
     car_id: number;
@@ -11,9 +11,8 @@ export class CreateCarDTO {
     @IsString({ message: 'Meta sub title phải là một chuỗi' })
     meta_sub_title: string;
 
-    @IsNotEmpty({ message: 'is_show_form không được để trống' })
-    @IsString({ message: 'is_show_form phải là một chuỗi' })
-    is_show_form: string;
+    @IsBoolean()
+    is_show_form: boolean;
 
     @IsNotEmpty({ message: 'Mô tả không được để trống' })
     @IsString({ message: 'Mô tả phải là một chuỗi' })

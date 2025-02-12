@@ -23,10 +23,6 @@ User.init(
             allowNull: true,
             defaultValue: 'user',
         },
-        address: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
-        },
         address_detail: {
             type: DataTypes.STRING,
             allowNull: true,

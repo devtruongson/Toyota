@@ -8,6 +8,8 @@ const initApiCar = (app: Express) => {
     router.post('/', handleCheckTokenAdmin, CarController.handleCreateCar);
     router.put('/', handleCheckTokenAdmin, CarController.handleUpdateCar);
     router.patch('/', handleCheckTokenAdmin, CarController.handleUpdateVisible);
+    router.patch('/status-image', handleCheckTokenAdmin, CarController.handleUpdateVisibleStatusImage);
+    router.delete('/image/:id', handleCheckTokenAdmin, CarController.handleDeleteImageCar);
     router.get('/', CarController.handleGetAllCar);
     router.get('/:id', CarController.handleGetDetailCar);
     return app.use('/v1/car', router);
