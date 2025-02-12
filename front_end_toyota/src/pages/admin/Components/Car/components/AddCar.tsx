@@ -51,11 +51,9 @@ const AddCarPage: React.FC = () => {
                     name="meta_sub_title"
                     rules={[{ required: true, message: 'Vui lòng nhập meta sub title' }]}
                 >
-                    <Input placeholder="Nhập meta sub title" />
+                    <Input.TextArea className="min-h-[200px]" placeholder="Nhập meta sub title" />
                 </Form.Item>
-                <Form.Item label="Hiển thị Form" name="is_show_form" valuePropName="checked">
-                    <Checkbox />
-                </Form.Item>
+
                 <Form.Item
                     label="Description"
                     name="description"
@@ -181,9 +179,14 @@ const AddCarPage: React.FC = () => {
                 >
                     <Input placeholder="Nhập key code" />
                 </Form.Item>
-                <Form.Item label="Active" name="is_active" valuePropName="checked">
-                    <Checkbox />
-                </Form.Item>
+                <div className="flex gap-2">
+                    <Form.Item label="Active" name="is_active" valuePropName="checked">
+                        <Checkbox />
+                    </Form.Item>
+                    <Form.Item label="Hiển thị Form" name="is_show_form" valuePropName="checked">
+                        <Checkbox />
+                    </Form.Item>
+                </div>
                 <h3 className="text-2xl font-semibold mt-8 mb-4">Tính năng của xe</h3>
                 <Form.Item name="car_features">
                     <Space direction="vertical" className="w-full">

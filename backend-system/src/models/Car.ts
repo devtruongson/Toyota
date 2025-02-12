@@ -21,6 +21,10 @@ Car.init(
             type: DataTypes.BOOLEAN,
             allowNull: false,
         },
+        url_video_demo: {
+            type: DataTypes.TEXT('long'),
+            allowNull: false,
+        },
         description: {
             type: DataTypes.TEXT('long'),
             allowNull: false,
