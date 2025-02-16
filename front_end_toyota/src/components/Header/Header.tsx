@@ -8,40 +8,29 @@ import {
     YoutubeOutlined,
 } from '@ant-design/icons';
 import { Button, Dropdown, Menu, Popover } from 'antd';
-import { useDispatch } from 'react-redux';
 import slug from 'slug';
 import Swal from 'sweetalert2';
-import { useAppSelector } from '../../app/hooks';
-import { logOutAction } from '../../app/slices/appSlice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { logOutAction, saveCate, saveCurrentcar } from '../../app/slices/appSlice';
 import processENV from '../../configs/process';
+import { Link, useNavigate } from 'react-router-dom';
+import { routes } from '../../constants/routes';
+import { useEffect, useState } from 'react';
+import { getAllCateActive } from '../../services/cateService';
+import { HttpStatusCode } from 'axios';
+import { formatLink } from '../../helpers/formatLink';
+import { getAllCar } from '../../services/carService';
+import { ICar } from '../../utils/interface';
+import { naviHeader } from '../../constants';
 
 const Header = () => {
     const isLoginIn = useAppSelector((state) => state.auth.IsLoginIn);
     const user = useAppSelector((state) => state.auth.user);
+    const cates = useAppSelector((state) => state.cates);
+    const [cars, setCars] = useState<ICar[]>([]);
 
-    const menuProducts = (
-        <Menu className="w-72 shadow-lg rounded-lg">
-            <div className="grid grid-cols-2 gap-4 p-4">
-                <div>
-                    <h4 className="font-semibold text-gray-700 mb-2">ĐỘNG CƠ XĂNG</h4>
-                    <Menu.Item key="1">VinFast Fadil</Menu.Item>
-                    <Menu.Item key="2">VinFast Lux A2.0</Menu.Item>
-                    <Menu.Item key="3">VinFast Lux SA2.0</Menu.Item>
-                    <Menu.Item key="4">VinFast President</Menu.Item>
-                </div>
-                <div>
-                    <h4 className="font-semibold text-gray-700 mb-2">ĐỘNG CƠ ĐIỆN</h4>
-                    <Menu.Item key="5">VinFast VF 5</Menu.Item>
-                    <Menu.Item key="6">VinFast VF 6</Menu.Item>
-                    <Menu.Item key="7">VinFast VF E34</Menu.Item>
-                    <Menu.Item key="8">VinFast VF 8</Menu.Item>
-                    <Menu.Item key="9">VinFast VF 9</Menu.Item>
-                </div>
-            </div>
-        </Menu>
-    );
+    const dispatch = useAppDispatch();
 
-    const dispatch = useDispatch();
     const handleLogout = () => {
         Swal.fire({
             text: 'Bạn chắc chắn muốn đăng xuất!',
@@ -87,8 +76,29 @@ const Header = () => {
         </div>
     );
 
+    useEffect(() => {
+        const fetch = async () => {
+            const [resCate, resCar] = await Promise.all([getAllCateActive(), getAllCar(1, 6, true)]);
+            if (resCate.code === HttpStatusCode.Ok) {
+                dispatch(
+                    saveCate(
+                        resCate.data.map((item) => {
+                            return { ...item, path: formatLink(item.title) };
+                        }),
+                    ),
+                );
+            }
+            if (resCar.code === HttpStatusCode.Ok) {
+                setCars(resCar.data.items);
+            }
+        };
+
+        fetch();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
-        <header className="bg-white shadow-md">
+        <header className="bg-white shadow-md z-[99] relative header-main">
             <div className="bg-[#1464f4] text-[#fff] py-2">
                 <div className="container mx-auto flex justify-between items-center">
                     <ul className="p-0 m-0 flex gap-[20px]">
@@ -161,37 +171,44 @@ const Header = () => {
                 <nav>
                     <ul className="flex space-x-6 text-gray-700 font-medium">
                         <li>
-                            <a href="#" className="hover:text-blue-600">
+                            <a href={routes.home} className="hover:text-blue-600">
                                 TRANG CHỦ
                             </a>
                         </li>
                         <li>
-                            <a href="#" className="hover:text-blue-600">
-                                GIỚI THIỆU
-                            </a>
-                        </li>
-                        <li>
-                            <Dropdown overlay={menuProducts}>
-                                <a href="#" className="hover:text-blue-600 flex items-center">
-                                    SẢN PHẨM <DownOutlined className="ml-1" />
-                                </a>
+                            <Dropdown overlay={<PoppverCommon data={naviHeader} />} className="">
+                                <p>
+                                    GIỚI THIỆU <DownOutlined className="ml-1 " />
+                                </p>
                             </Dropdown>
                         </li>
                         <li>
-                            <a href="#" className="hover:text-blue-600">
-                                DỊCH VỤ
-                            </a>
+                            <Dropdown
+                                overlay={
+                                    <PoppverCommon
+                                        data={cars.map((item) => ({
+                                            title: item.title,
+                                            link: `${routes.products}/${formatLink(item.title)}`,
+                                            id: item.id,
+                                        }))}
+                                    />
+                                }
+                            >
+                                <Link to={routes.products} className="hover:text-blue-600 flex items-center">
+                                    SẢN PHẨM <DownOutlined className="ml-1" />
+                                </Link>
+                            </Dropdown>
                         </li>
-                        <li>
-                            <a href="#" className="hover:text-blue-600">
-                                BẢO HIỂM
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" className="hover:text-blue-600">
-                                TIN TỨC - SỰ KIỆN
-                            </a>
-                        </li>
+                        {cates &&
+                            cates.map((cate) => {
+                                return (
+                                    <Link to={`/blogs/${cate.path}`} key={cate.id}>
+                                        <li key={cate.id} className="uppercase hover:text-blue-600">
+                                            {cate.title}
+                                        </li>
+                                    </Link>
+                                );
+                            })}
                     </ul>
                 </nav>
 
@@ -210,3 +227,47 @@ const Header = () => {
 };
 
 export default Header;
+
+type PoppverCommonProps = {
+    data: { title: string; link: string; id?: number }[];
+};
+const PoppverCommon = ({ data }: PoppverCommonProps) => {
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+
+    const handleNavigate = (link: string, id?: number) => {
+        if (id) {
+            dispatch(saveCurrentcar(id));
+        }
+        navigate(link);
+    };
+
+    return (
+        <Menu className="w-72 shadow-lg rounded-lg " style={{ background: 'white', padding: '0' }}>
+            <div className="bg-white">
+                <div className="bg-white">
+                    {data && data.length > 0
+                        ? data.map((item) => {
+                              return (
+                                  <Menu.Item
+                                      key="1"
+                                      className="py-[20px]"
+                                      style={{
+                                          background: 'white',
+                                          paddingLeft: '10px',
+                                          paddingTop: '10px',
+                                          paddingBottom: '10px',
+                                          border: '1px solid #f4f4f4',
+                                      }}
+                                      onClick={() => handleNavigate(item.link, item.id)}
+                                  >
+                                      {item.title}
+                                  </Menu.Item>
+                              );
+                          })
+                        : null}
+                </div>
+            </div>
+        </Menu>
+    );
+};

@@ -1,4 +1,5 @@
 import axios from '../axios';
+import { ModelType } from '../types/car';
 import { ICar, IPagin, IRes } from '../utils/interface';
 
 export const getAllCar = async (
@@ -27,5 +28,10 @@ export const uploadCar = async (data: ICar): Promise<IRes<ICar>> => {
 
 export const getDetailCarService = async (id: number): Promise<IRes<ICar>> => {
     const dataRes = (await axios.get(`/v1/car/${id}`)) as IRes<ICar>;
+    return dataRes;
+};
+
+export const getCarBuyModel = async (model: ModelType): Promise<IRes<ICar[]>> => {
+    const dataRes = (await axios.get(`/v1/car/get-by-model?model=${model}`)) as IRes<ICar[]>;
     return dataRes;
 };

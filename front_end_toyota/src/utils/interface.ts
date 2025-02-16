@@ -117,6 +117,7 @@ export interface ICar {
     id: number;
     title: string;
     meta_sub_title: string;
+    url_video_demo: string;
     is_show_form: boolean;
     description: string;
     weight: number;
@@ -151,4 +152,20 @@ export interface ICar {
 export interface IUpload {
     name_file: string;
     url_public: string;
+}
+
+export interface IBlog {
+    id: number;
+    thumbnail: string;
+    title: string;
+    meta_description: string;
+    content: string;
+    is_active: boolean;
+}
+
+export interface ICate {
+    id: number;
+    title: string;
+    is_active: boolean;
+    path: string;
 }

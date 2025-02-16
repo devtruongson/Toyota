@@ -1,14 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { IAuth } from '../../utils/interface';
+import { IAuth, ICate } from '../../utils/interface';
 
 const initialState: {
     auth: IAuth;
+    cates: ICate[];
+    currentCar: number | null;
 } = {
     auth: {
         IsLoginIn: false,
         user: null,
         tokens: null,
     },
+    cates: [],
+    currentCar: null,
 };
 
 export const appSlice = createSlice({
@@ -29,8 +33,19 @@ export const appSlice = createSlice({
         updateTokens: (state, action) => {
             state.auth.tokens = action.payload;
         },
+        saveCate: (state, action) => {
+            if (!action.payload) return;
+            state.cates = action.payload;
+        },
+        deleteCate: (state) => {
+            state.cates = [];
+        },
+
+        saveCurrentcar: (state, action) => {
+            state.currentCar = action.payload;
+        },
     },
 });
 
-export const { loginSucessAction, logOutAction, updateTokens } = appSlice.actions;
+export const { loginSucessAction, logOutAction, updateTokens, saveCate, deleteCate, saveCurrentcar } = appSlice.actions;
 export default appSlice.reducer;

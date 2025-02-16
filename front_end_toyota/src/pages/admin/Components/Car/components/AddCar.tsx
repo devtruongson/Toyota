@@ -1,41 +1,51 @@
 import { Button, Checkbox, Form, Input, InputNumber, Space } from 'antd';
 import { HttpStatusCode } from 'axios';
-import React, { useState } from 'react';
+import React from 'react';
 import processENV from '../../../../../configs/process';
 import { uploadFileService } from '../../../../../services/uploadService';
 import { ICar } from '../../../../../utils/interface';
+import ButtonClose from '../../../../product/component/common/ButtonClose/ButtonClose';
+import { PlusOutlined } from '@ant-design/icons';
 
 const AddCarPage: React.FC = () => {
     const [form] = Form.useForm();
-    const [listImage, setListImage] = useState<string[]>([]);
 
     const onFinish = async (values: ICar) => {
         console.log('Dữ liệu form:', values);
-        if (!listImage.length) {
-            return;
-        }
+
         try {
             // const data  = values.car_features =
         } catch (error) {
             console.log(error);
         }
-        // Ở đây bạn có thể tích hợp gọi API thêm xe, ví dụ:
-        // addCarService(values).then(...).catch(...);
     };
-    const handleUploadFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleUploadFile = async (e: React.ChangeEvent<HTMLInputElement>, target: number) => {
         try {
             const files = e.target?.files;
+
             if (!files) return;
             const file = files[0];
             const res = await uploadFileService({
                 file: file,
             });
             if (res.code === HttpStatusCode.Ok) {
-                setListImage((prev) => [...prev, res.data.url_public]);
+                form.setFieldsValue({
+                    car_features: {
+                        [target]: {
+                            url_public: res.data.url_public,
+                        },
+                    },
+                });
             }
         } catch (error) {
             console.log(error);
         }
+    };
+
+    const onDeleteFile = (target: number) => {
+        const features = form.getFieldValue('car_features');
+        features[target].url_public = '';
+        form.setFieldsValue({ car_features: features });
     };
 
     return (
@@ -188,40 +198,81 @@ const AddCarPage: React.FC = () => {
                     </Form.Item>
                 </div>
                 <h3 className="text-2xl font-semibold mt-8 mb-4">Tính năng của xe</h3>
-                <Form.Item name="car_features">
-                    <Space direction="vertical" className="w-full">
+                <Form.List name="car_features">
+                    {(fields, { add, remove }) => (
                         <div>
-                            <Input type="file" onChange={handleUploadFile} />
-                            <div>
-                                <ul>
-                                    {listImage.map((url, index) => (
-                                        <li
-                                            key={index}
-                                            className="flex items-center gap-3 border-amber-200 border rounded-md my-1"
+                            {fields.map(({ key, name, ...restField }) => {
+                                const image = form.getFieldValue(['car_features', name, 'url_public']);
+
+                                return (
+                                    <div>
+                                        <Space
+                                            key={key}
+                                            direction="vertical"
+                                            className=" w-full border-[1px] border-solid border-[#ddd] rounded-[8px] relative"
+                                            style={{ padding: '16px', marginBottom: '60px' }}
                                         >
-                                            <img
-                                                src={`${processENV.VITE_URL_BACKEND}${url}`}
-                                                className="w-[50px] object-cover h-[50px]"
-                                                alt=""
-                                            />
-                                            <span>{url}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
+                                            <div>
+                                                {/* <Form.Item {...restField} name={[name, 'url_public']}> */}
+                                                <Form.Item {...restField} name={[name, 'url_public']} hidden>
+                                                    <Input />
+                                                </Form.Item>
+                                                <Form.Item>
+                                                    <Input
+                                                        type="file"
+                                                        onChange={(e) => handleUploadFile(e, name)}
+                                                        disabled={Boolean(image)}
+                                                        className="w-[80%]"
+                                                    />
+                                                </Form.Item>
+                                                {image ? (
+                                                    <div className="flex justify-between items-center w-full">
+                                                        <div className="w-[95%]">
+                                                            <ul>
+                                                                <li className="flex items-center gap-3 border-amber-200 border rounded-md my-1">
+                                                                    <img
+                                                                        src={`${processENV.VITE_URL_BACKEND}${image}`}
+                                                                        className="w-[50px] object-cover h-[50px]"
+                                                                        alt=""
+                                                                    />
+                                                                    <span>{image}</span>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <ButtonClose
+                                                            onClick={() => onDeleteFile(name)}
+                                                            color="orange"
+                                                        />
+                                                    </div>
+                                                ) : null}
+                                            </div>
+                                            <Form.Item
+                                                {...restField}
+                                                label="Color"
+                                                name={[name, 'color']}
+                                                rules={[{ required: true, message: 'Vui lòng nhập color' }]}
+                                            >
+                                                <Input placeholder="Nhập color" />
+                                            </Form.Item>
+                                            <Form.Item label="Active" name="is_active" valuePropName="checked">
+                                                <Checkbox />
+                                            </Form.Item>
+                                            <div className="absolute top-[-30px] right-0">
+                                                <ButtonClose onClick={() => remove(name)} />
+                                            </div>
+                                        </Space>
+                                    </div>
+                                );
+                            })}
+
+                            <Form.Item>
+                                <Button type="dashed" onClick={() => add()} icon={<PlusOutlined />}>
+                                    Thêm mục
+                                </Button>
+                            </Form.Item>
                         </div>
-                        <Form.Item
-                            label="Color"
-                            name="color"
-                            rules={[{ required: true, message: 'Vui lòng nhập color' }]}
-                        >
-                            <Input placeholder="Nhập color" />
-                        </Form.Item>
-                        <Form.Item label="Active" name="is_active" valuePropName="checked">
-                            <Checkbox />
-                        </Form.Item>
-                    </Space>
-                </Form.Item>
+                    )}
+                </Form.List>
 
                 <Form.Item>
                     <Button type="primary" htmlType="submit" className="w-full">
