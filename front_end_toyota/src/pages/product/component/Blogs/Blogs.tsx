@@ -32,7 +32,7 @@ const Blogs = () => {
     }, [currentCate]);
 
     return (
-        <div className="w-full bg-[#f4f8fa]">
+        <div className="w-full bg-[#f4f8fa] min-h-[100vh]">
             <BannerPage title={currentCate?.title || ''} desciption={currentCate?.title || ''} />
 
             <div className={`py-[100px] flex justify-center`}>
