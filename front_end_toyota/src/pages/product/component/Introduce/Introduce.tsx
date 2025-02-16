@@ -15,7 +15,7 @@ const Introduce = () => {
                 </div>
 
                 <div className="w-[50%] px-[20px]">
-                    <p className="text-center text-[24px] text-red-400 font-[500] mb-[8px]">VỀ CHÚNG TÔI</p>
+                    <LabelCommon label="VỀ CHÚNG TÔI" />
                     <p className="mb-[8px]">
                         Ngày 01/11/2019, Đại lý Vinfast Chevrolet Newway đã chính thức trở thành đại lý ủy quyền xe ô tô
                         Vinfast 3S lớn nhất tại Việt Nam, chuyên cung cấp các sản phẩm ô tô: Vinfast Lux SA2.0, Vinfast
@@ -49,9 +49,32 @@ const Introduce = () => {
                 </div>
             </div>
 
-            <div className="w-[60%] flex justify-between items-stretch">
+            <div className="w-[60%] flex justify-between items-stretch py-[20px]">
                 <div className="w-[45%]">
-                    <div className=""></div>
+                    <div className="flex justify-center items-center bg-gray-100 mb-[20px]">
+                        <div className="relative w-full h-[250px] cursor-pointer overflow-hidden group">
+                            <div className="bg-white absolute inset-0  flex flex-col items-center justify-center gap-[10px] transition-all duration-500 ease-in-out transform group-hover:-translate-y-full group-hover:opacity-0">
+                                <div className="w-[60px] h-[60px] bg-red-500 rounded-[100%]">car</div>
+                                <p className="text-[28px] font-[500]">Trụ sở chính</p>
+                                <p> Số 183 Yên Lãng, Thịnh Quang, Đống Đa, Hà Nội</p>
+                            </div>
+                            <div className="bg-black absolute inset-0 flex flex-col items-center gap-[10px] justify-center text-white transition-all duration-500 ease-in-out transform translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+                                <p className="text-[28px] font-[500]">Bản đồ chỉ đường</p>
+                                <p>Click để mở bản đồ chi tiết chỉ đường đến Newway</p>
+                                <button
+                                    className="border-[1px] border-solid border-[#fff] px-[20px] py-[10px] hover:border-none hover:bg-red-500 cursor-pointer"
+                                    onClick={() =>
+                                        window.open(
+                                            'https://www.google.com/search?q=vinfast-chevrolet-newway',
+                                            '_blank',
+                                        )
+                                    }
+                                >
+                                    Xem bản đồ
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                     <p>
                         Nằm tại vị trí đắc địa nhất Hà Nội, 183 – 185 Yên Lãng, ngay cạnh ngã 3 đường Láng giao với phố
                         Yên Lãng, có diện tích hơn 2000 m2, bao gồm: Showroom trưng bày dòng xe ô tô Vinfast và xe ô tô
@@ -62,7 +85,30 @@ const Introduce = () => {
                 </div>
 
                 <div className="w-[45%]">
-                    <div className=""></div>
+                    <div className="flex justify-center items-center bg-gray-100 mb-[20px]">
+                        <div className="relative w-full h-[250px] cursor-pointer overflow-hidden group">
+                            <div className="bg-white absolute inset-0  flex flex-col items-center justify-center gap-[10px] transition-all duration-500 ease-in-out transform group-hover:-translate-y-full group-hover:opacity-0">
+                                <div className="w-[60px] h-[60px] bg-red-500 rounded-[100%]">car</div>
+                                <p className="text-[28px] font-[500]"> Chi nhánh HOÀI ĐỨC</p>
+                                <p>Cụm CN Lai Xá, Kim Chung, Hoài Đức, Hà Nội</p>
+                            </div>
+                            <div className="bg-black absolute inset-0 flex flex-col items-center gap-[10px] justify-center text-white transition-all duration-500 ease-in-out transform translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+                                <p className="text-[28px] font-[500]">Bản đồ chỉ đường</p>
+                                <p>Click để mở bản đồ chi tiết chỉ đường đến chi nhánh Hoài Đức</p>
+                                <button
+                                    className="border-[1px] border-solid border-[#fff] px-[20px] py-[10px] hover:border-none hover:bg-red-500 cursor-pointer"
+                                    onClick={() =>
+                                        window.open(
+                                            'https://www.google.com/maps/place//@21.0581063,105.7253419,16.7z?entry=ttu&g_ep=EgoyMDI1MDIxMi4wIKXMDSoASAFQAw%3D%3D',
+                                            '_blank',
+                                        )
+                                    }
+                                >
+                                    Xem bản đồ
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                     <p>
                         Với diện tích trên 4.000m2, bao gồm khu bán hàng, văn phòng & xưởng dịch vụ riêng biệt, đảm bảo
                         mang đến dịch vụ tiêu chuẩn tốt nhất trong tất cả các đại lý của hãng ô tô Vinfast. Xưởng dịch
@@ -73,8 +119,30 @@ const Introduce = () => {
                     </p>
                 </div>
             </div>
+
+            {/* Sản phẩm & Dịch vụ */}
+            <div className="w-full bg-white flex flex-col items-center py-[50px]">
+                <LabelCommon label="Sản phẩm & Dịch vụ" />
+                <div className="w-[50%] flex flex-col items-center">
+                    <img
+                        src={'https://vinfastnewway.com.vn/wp-content/uploads/2019/08/vinfast.png'}
+                        alt=""
+                        className="w-[500px]"
+                    />
+                    <p className="text-[20px] uppercase">Đại Lý 3S</p>
+                    <p className="text-[#5d5e5e]">Bán xe Ô tô Vinfast Fadil, Vinfast Lux A2.0, Vinfast SA2.0</p>
+                    <p className="text-[#5d5e5e]">Dịch vụ Bảo dưỡng, Bảo hành, Sửa chữa xe ô tô Vinfast</p>
+                </div>
+            </div>
+
+            {/* THÀNH TỰU */}
+            <div className=""></div>
         </div>
     );
 };
 
 export default Introduce;
+
+const LabelCommon = ({ label }: { label: string }) => {
+    return <p className="text-center font-[500] text-[28px] mb-[28px] text-red-500 uppercase">{label}</p>;
+};

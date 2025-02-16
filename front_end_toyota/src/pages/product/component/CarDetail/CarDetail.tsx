@@ -4,7 +4,7 @@ import { ICar } from '../../../../utils/interface';
 import { getDetailCarService } from '../../../../services/carService';
 import { HttpStatusCode } from 'axios';
 import { Col, Row } from 'antd';
-import { imageShowroom } from '../../../../constants';
+import { defaultImageCar, imageShowroom } from '../../../../constants';
 import { colors } from '../../../../constants/colors';
 import { formatVND } from '../../../../helpers/formatVND';
 import Installment from '../common/Installment/Installment';
@@ -32,9 +32,7 @@ const CarDetail = () => {
             const res = await getDetailCarService(carId as number);
             if (res.code === HttpStatusCode.Ok) {
                 setCar(res.data);
-                if (res.data.car_features.length > 0) {
-                    setImageActive(res.data.car_features[0].image_url);
-                }
+                setImageActive(res?.data?.car_features[0]?.image_url || defaultImageCar);
             }
         };
 
