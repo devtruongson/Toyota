@@ -17,7 +17,6 @@ const CardCar = ({ car }: Props) => {
         dispatch(saveCurrentcar(car.id));
         navigate(`${routes.products}/${formatLink(car.title)}`);
     };
-
     return (
         <div
             className="hover:text-[red] bg-[white] pb-[20px] cursor-pointer object-cover overflow-hidden shadow rounded-[4px]"
@@ -25,7 +24,7 @@ const CardCar = ({ car }: Props) => {
         >
             <div className="overflow-hidden">
                 <img
-                    src={defaultImageCar}
+                    src={car?.car_features?.[0]?.image_url || defaultImageCar}
                     alt="thumbnail"
                     className="transition-transform duration-300 ease-in-out transform hover:scale-110"
                 />
