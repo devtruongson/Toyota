@@ -1,3 +1,5 @@
-.slick-dots{
-    display: none !important;
+.banner{
+    .slick-dots{
+        display: none !important;
+    }
 }

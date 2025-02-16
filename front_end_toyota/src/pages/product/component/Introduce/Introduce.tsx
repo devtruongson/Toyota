@@ -1,4 +1,7 @@
 import CountUp from 'react-countup';
+import { colors } from '../../../../constants/colors';
+import { CarFilled } from '@ant-design/icons';
+import SlideCommon from '../common/SlideCommon/SlideCommon';
 
 const Introduce = () => {
     return (
@@ -49,12 +52,15 @@ const Introduce = () => {
                 </div>
             </div>
 
+            {/* Địa chỉ */}
             <div className="w-[60%] flex justify-between items-stretch py-[20px]">
                 <div className="w-[45%]">
                     <div className="flex justify-center items-center bg-gray-100 mb-[20px]">
                         <div className="relative w-full h-[250px] cursor-pointer overflow-hidden group">
                             <div className="bg-white absolute inset-0  flex flex-col items-center justify-center gap-[10px] transition-all duration-500 ease-in-out transform group-hover:-translate-y-full group-hover:opacity-0">
-                                <div className="w-[60px] h-[60px] bg-red-500 rounded-[100%]">car</div>
+                                <div className="w-[60px] h-[60px] bg-red-500 rounded-[100%] flex justify-center items-center text-white">
+                                    <CarFilled className="text-[24px]" />
+                                </div>
                                 <p className="text-[28px] font-[500]">Trụ sở chính</p>
                                 <p> Số 183 Yên Lãng, Thịnh Quang, Đống Đa, Hà Nội</p>
                             </div>
@@ -88,7 +94,9 @@ const Introduce = () => {
                     <div className="flex justify-center items-center bg-gray-100 mb-[20px]">
                         <div className="relative w-full h-[250px] cursor-pointer overflow-hidden group">
                             <div className="bg-white absolute inset-0  flex flex-col items-center justify-center gap-[10px] transition-all duration-500 ease-in-out transform group-hover:-translate-y-full group-hover:opacity-0">
-                                <div className="w-[60px] h-[60px] bg-red-500 rounded-[100%]">car</div>
+                                <div className="w-[60px] h-[60px] bg-red-500 rounded-[100%] flex justify-center items-center text-white">
+                                    <CarFilled className="text-[24px]" />
+                                </div>
                                 <p className="text-[28px] font-[500]"> Chi nhánh HOÀI ĐỨC</p>
                                 <p>Cụm CN Lai Xá, Kim Chung, Hoài Đức, Hà Nội</p>
                             </div>
@@ -136,7 +144,123 @@ const Introduce = () => {
             </div>
 
             {/* THÀNH TỰU */}
-            <div className=""></div>
+            <div className="py-[40px] flex flex-col items-center" style={{ background: colors.bg }}>
+                <LabelCommon label="thành tựu" />
+
+                <div className="w-[60%] bg-white p-[20px] mb-[40px] rounded-[8px]">
+                    <p className="mb-[10px]">
+                        Sau gần 10 năm hình thành phát triển, sau hơn 3 năm gia nhập hãng Chevrolet, đại lý Chevrolet
+                        Newway đã từng bước khẳng định được vị thế cũng như tạo được uy tín lớn trên thị trường kinh
+                        doanh ô tô trong nước.
+                    </p>
+                    <ul className="list-disc pl-5">
+                        <li>
+                            Năm 2017: Là đại lý đạt doanh số bán xe cao nhất toàn quốc với hơn 1078 xe – xác lập kỷ lục
+                            bán xe tại Việt Nam
+                        </li>
+                        <li>
+                            Năm 2017: <span> Đại lý đạt doanh số bán xe Chevrolet Colorado cao nhất toàn quốc</span>
+                        </li>
+                        <li>
+                            Năm 2018 với 1430 xe – phá vỡ kỷ lục bán xe của chính mình & tiếp tục là đại lý duy nhất đạt
+                            kỷ lục mới cho Chevrolet
+                        </li>
+                        <li>Hiện là đại lý số 1 tại Việt Nam & luôn phấn đấu giữ vững ngôi vị cao nhất đó.</li>
+                    </ul>
+                </div>
+
+                <div className="w-[640px]">
+                    <SlideCommon
+                        listImage={[
+                            'https://vinfastnewway.com.vn/wp-content/uploads/2019/11/KetQuaVuotBac3-640x360.jpg',
+                            'https://vinfastnewway.com.vn/wp-content/uploads/2019/11/KetQuaVuotBac-640x360.jpg',
+                            'https://vinfastnewway.com.vn/wp-content/uploads/2019/11/KetQuaVuotBac1-640x360.jpg',
+                            'https://vinfastnewway.com.vn/wp-content/uploads/2019/11/KetQuaVuotBac3-640x360.jpg',
+                            'https://vinfastnewway.com.vn/wp-content/uploads/2019/11/KetQuaVuotBac3-640x360.jpg',
+                        ]}
+                    />
+                </div>
+            </div>
+
+            {/* Đội ngũ nhân sự */}
+            <div className="w-full flex flex-col items-center bg-white py-[40px]">
+                <LabelCommon label="Đội ngũ nhân sự" />
+
+                <div className="w-[60%] mb-[40px]">
+                    <p className="mb-[10px]">
+                        Luôn quan niệm Cán bộ công nhân viên là nguồn lực quan trọng tạo nên sự thành công và phát triển
+                        bền vững của công ty. Newway luôn hướng đến việc xây dựng một đội ngũ nhân sự có niềm đam mê; ý
+                        chí mạnh mẽ; thái độ làm việc tích cực; tính sáng tạo cao và ý thức trau dồi chuyên môn; tác
+                        phong làm việc chuyên nghiệp để cung cấp các dịch vụ hoàn hảo nhất tới Khách hàng.Với nền tảng
+                        kinh nghiệm được xây dựng và tích lũy gần 10 năm hình thành và phát triển, bằng sự tận tâm và nỗ
+                        lực của hơn 200 CBCNV, chúng tôi cam kết:
+                    </p>
+
+                    <ul className="list-disc pl-5">
+                        <li>Đại lý số 1 về chất lượng dịch vụ.</li>
+                        <li>Tư vấn bán hàng chuyên nghiệp.</li>
+                        <li>Dịch vụ hỗ trợ khách hàng sau bán hàng tốt nhất.</li>
+                        <li>Tư vấn kỹ thuật sửa chữa thay thế tốt nhất.</li>
+                        <li>Nỗ lực chăm sóc khách hàng chu đáo nhất.</li>
+                    </ul>
+                </div>
+
+                <div className="w-[50%]">
+                    <SlideCommon
+                        listImage={[
+                            'https://vinfastnewway.com.vn/wp-content/uploads/2019/11/dai-ly-vinfast-newway-ban-xe-03.jpg',
+                            'https://vinfastnewway.com.vn/wp-content/uploads/2019/10/doanhnhan201906.jpg',
+                            'https://vinfastnewway.com.vn/wp-content/uploads/2019/11/doi-ngu-nhan-su-02.jpg',
+                            'https://vinfastnewway.com.vn/wp-content/uploads/2019/11/doi-ngu-nhan-su-03.jpg',
+                            'https://vinfastnewway.com.vn/wp-content/uploads/2019/11/doi-ngu-nhan-su-03.jpg',
+                        ]}
+                    />
+                </div>
+            </div>
+
+            {/* HOẠT ĐỘNG XÃ HỘI */}
+            <div className="w-full flex flex-col items-center bg-white py-[40px]" style={{ background: colors.bg }}>
+                <LabelCommon label="HOẠT ĐỘNG XÃ HỘI" />
+
+                <div className="w-[60%] mb-[40px]">
+                    <p className="mb-[10px]">
+                        Bên cạnh những hoạt động kinh doanh hàng ngày, Vinfast Chevrolet Newway còn thể hiện “trách
+                        nhiệm với xã hội” thông qua các hoạt động cộng đồng. Trong những năm qua, ban lãnh đạo cùng toàn
+                        thể CBCNV Công ty đã tổ chức nhiều hoạt động ý nghĩa, các chương trình từ thiện đến các tỉnh
+                        vùng sâu, vùng xa:
+                    </p>
+
+                    <ul className="list-disc pl-5">
+                        <li>
+                            Lắp đặt sân chơi, tặng áo ấm & đồ dùng cho các em nhỏ tại 3 điểm trường: Pá Hốc, Pa Cư Sáng,
+                            tiểu học Hang Chú tại tỉnh Sơn La;
+                        </li>
+                        <li>
+                            Trao áo ấm & các suất quà tết cho các hộ nghèo tại xã Tân Lạc, Hòa Bình mong các gia đình có
+                            1 cái tết ấm áp;
+                        </li>
+                        <li>
+                            Vượt gần 1000km để mang hơi ấm tới cho các em nhỏ tại xã Nà Toong, Tuần Giáo, Điện Biên;
+                        </li>
+                        <li>
+                            Trao các suất quà tới các gia đình khó khăn, bị bệnh hiểm nghèo tại quận Hải An, TP Hải
+                            Phòng
+                        </li>
+                    </ul>
+                </div>
+
+                <div className="w-[50%]">
+                    <SlideCommon
+                        listImage={[
+                            'http://vinfastnewway.com.vn/wp-content/uploads/2019/11/tu-thien-02.jpg',
+                            'https://vinfastnewway.com.vn/wp-content/uploads/2019/11/tu-thien-01.jpg',
+                            'https://vinfastnewway.com.vn/wp-content/uploads/2019/11/tu-thien-05.jpg',
+                            'https://vinfastnewway.com.vn/wp-content/uploads/2019/11/tu-thien-03.jpg',
+                            'https://vinfastnewway.com.vn/wp-content/uploads/2019/11/tu-thien-04.jpg',
+                        ]}
+                    />
+                </div>
+            </div>
         </div>
     );
 };

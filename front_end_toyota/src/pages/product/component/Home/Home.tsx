@@ -36,8 +36,6 @@ const Home = () => {
         fetch();
     }, []);
 
-    console.log(cars);
-
     return (
         <div className="w-full bg-[#f4f8fa]">
             <div className="w-full mx-auto banner">
