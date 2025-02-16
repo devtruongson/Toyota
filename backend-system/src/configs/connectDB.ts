@@ -1,8 +1,9 @@
 import { Sequelize } from 'sequelize';
 
-export const sequelize = new Sequelize('system_manage', 'sa', 'Nson091120@', {
+export const sequelize = new Sequelize('system_manage', 'sa', '123456', {
     dialect: 'mssql',
     host: 'localhost',
+    logging: false,
 });
 
 export default async function connectDB() {

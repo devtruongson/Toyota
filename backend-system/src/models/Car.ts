@@ -136,6 +136,10 @@ Car.init(
             defaultValue: true,
             allowNull: false,
         },
+        // fuel_type: {
+        //     type: DataTypes.ENUM('electric', 'gasoline'),
+        //     allowNull: false,
+        // },
     },
     {
         sequelize,

@@ -15,6 +15,7 @@ import TableIntorior from '../common/TableIntorior/TableIntorior';
 const CarDetail = () => {
     const carId = useAppSelector((state) => state.currentCar);
     const [car, setCar] = useState<ICar | null>(null);
+    const [iamgeActive, setImageActive] = useState('');
 
     const headerHeightRef = useRef(0);
 
@@ -31,6 +32,9 @@ const CarDetail = () => {
             const res = await getDetailCarService(carId as number);
             if (res.code === HttpStatusCode.Ok) {
                 setCar(res.data);
+                if (res.data.car_features.length > 0) {
+                    setImageActive(res.data.car_features[0].image_url);
+                }
             }
         };
 
@@ -49,7 +53,27 @@ const CarDetail = () => {
                     <div className="w-full bg-white flex justify-center shadow pt-[8px] pb-[20px]">
                         <div className="w-[60%] ">
                             <Row>
-                                <Col span={16}>img</Col>
+                                <Col span={16}>
+                                    <div className="w-full">
+                                        <img src={iamgeActive} alt="image" className="w-full" />
+                                    </div>
+
+                                    <div className=" grid grid-cols-8">
+                                        {car.car_features && car.car_features.length > 0
+                                            ? car.car_features.map((item) => {
+                                                  return (
+                                                      <div
+                                                          key={item.id}
+                                                          className=""
+                                                          onClick={() => setImageActive(item.image_url)}
+                                                      >
+                                                          <img src={item.image_url} alt="image" />
+                                                      </div>
+                                                  );
+                                              })
+                                            : null}
+                                    </div>
+                                </Col>
                                 <Col span={8}>
                                     <div className="p-[8px] mb-[20px]">
                                         <p className="text-[24px] font-[500] mb-[8px]">{car.title}</p>

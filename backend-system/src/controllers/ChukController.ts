@@ -97,6 +97,7 @@ class ChukController {
                 page: req.query.page ? parseInt(req.query.page.toString()) : 1,
                 pageSize: req.query.pageSize ? parseInt(req.query.pageSize.toString()) : 1,
                 is_active: req.query.is_acive === 'false' ? false : true,
+                cateId: Number(req.query.cateId),
             };
             const data = await ChukService.handleGetAllBlog(query);
             return res.status(httpStatus.OK).json(data);

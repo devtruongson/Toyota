@@ -176,6 +176,23 @@ class CarService {
             Promise.reject(ResponseHandler(httpStatus.BAD_GATEWAY, null, 'có lỗi xảy ra!'));
         }
     }
+
+    async getCarByModel(model: string) {
+        try {
+            if (!model) {
+                return ResponseHandler(httpStatus.BAD_REQUEST, null, 'BAD REQUEST: MISSING OR INVALID model');
+            }
+
+            const cars = await Car.findAll({
+                where: { model: model, is_active: true },
+            });
+
+            return ResponseHandler(httpStatus.OK, cars, ' Successfully');
+        } catch (error) {
+            console.log(error);
+            Promise.reject(ResponseHandler(httpStatus.BAD_GATEWAY, null, 'có lỗi xảy ra!'));
+        }
+    }
 }
 
 export default new CarService();

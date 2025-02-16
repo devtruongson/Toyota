@@ -179,14 +179,19 @@ class ChukService {
         }
     }
 
-    async handleGetAllBlog(data: { page: number; pageSize: number; is_active: boolean }) {
+    async handleGetAllBlog(data: { page: number; pageSize: number; is_active: boolean; cateId: number }) {
         try {
             let offset: number = (data.page - 1) * data.pageSize;
+            let whereCondition: any = {
+                is_active: data.is_active,
+            };
+
+            if (data.cateId) {
+                whereCondition['cate_id'] = data.cateId;
+            }
 
             let { count, rows }: { count: number; rows: any } = await Blog.findAndCountAll({
-                where: {
-                    is_active: data.is_active,
-                },
+                where: whereCondition,
                 include: [
                     {
                         model: Cate,
