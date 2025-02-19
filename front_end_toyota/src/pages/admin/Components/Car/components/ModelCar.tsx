@@ -3,6 +3,7 @@ import { HttpStatusCode } from 'axios';
 import { useEffect, useState } from 'react';
 import { getDetailCarService } from '../../../../../services/carService';
 import { ICar } from '../../../../../utils/interface';
+import { getLinkImage } from '../../../../../helpers/getLinkImage';
 
 export default function ModalCar({
     handleCancel,
@@ -101,9 +102,9 @@ export default function ModalCar({
                     <Card title="Các tính năng của xe" className="shadow-lg">
                         <div className="flex flex-wrap gap-4">
                             {carData.car_features.map((feature) => (
-                                <div key={feature.id} className="flex flex-col items-center">
+                                <div key={feature.id} className="flex flex-col items-center relative">
                                     <img
-                                        src={feature.image_url}
+                                        src={getLinkImage(feature.image_url)}
                                         alt={feature.color}
                                         className="w-32 h-20 object-cover rounded"
                                     />

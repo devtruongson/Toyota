@@ -87,11 +87,41 @@ class CarController {
 
     async handleGetCarByModel(req: Request, res: Response) {
         try {
-            const model = 'electric';
+            const model = String(req.query.model);
             const data = await CarService.getCarByModel(model);
             return res.status(httpStatus.OK).json(data);
         } catch (err) {
             console.log(err);
+            return res.status(500).json(ResponseHandler(httpStatus.BAD_GATEWAY, null, 'Error From Server'));
+        }
+    }
+
+    async handleDeleteCar(req: Request, res: Response) {
+        try {
+            const data = await CarService.handleDeleteCar(Number(req.params.id));
+            return res.status(httpStatus.OK).json(data);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json(ResponseHandler(httpStatus.BAD_GATEWAY, null, 'Error From Server'));
+        }
+    }
+
+    async handleUpdateInfo(req: Request, res: Response) {
+        try {
+            const data = await CarService.handleUpdateCarService(req);
+            return res.status(httpStatus.OK).json(data);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json(ResponseHandler(httpStatus.BAD_GATEWAY, null, 'Error From Server'));
+        }
+    }
+
+    async handleCreateFeature(req: Request, res: Response) {
+        try {
+            const data = await CarService.handleCreateFeature(req);
+            return res.status(httpStatus.OK).json(data);
+        } catch (error) {
+            console.log(error);
             return res.status(500).json(ResponseHandler(httpStatus.BAD_GATEWAY, null, 'Error From Server'));
         }
     }

@@ -1,18 +1,22 @@
 import { Button, Select, Table } from 'antd';
 import { HttpStatusCode } from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
-import { changeVisibleCarService, getAllCar } from '../../../../../services/carService';
-import { ICar, ICarFeature, IMeta } from '../../../../../utils/interface';
+import { changeVisibleCarService, deleteCar, getAllCar } from '../../../../../services/carService';
+import { ICar, IMeta } from '../../../../../utils/interface';
 import ModalCar from './ModelCar';
+import ModalCofirmDelete from './ModalCofirmDelete';
+import ModalUpdateCar from './ModalUpdateCar';
 
-const AllCar: React.FC = () => {
+const AllCar = () => {
     const [data, setData] = useState<ICar[]>([]);
     const [meta, setMeta] = useState<IMeta>({ currentPage: 1, totalIteams: 0, totalPages: 0 });
     const [loading, setLoading] = useState<boolean>(false);
     const [isActive, setIsActive] = useState<boolean | string>(true);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [isOpenUpdate, setIsOpenUpdate] = useState(false);
     const [carIdView, setCarIdView] = useState<number | null>(null);
+    const [isReload, setIsReload] = useState(false);
 
     const fetchData = async (page: number = 1) => {
         setLoading(true);
@@ -32,10 +36,32 @@ const AllCar: React.FC = () => {
     useEffect(() => {
         fetchData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isActive]);
+    }, [isActive, isReload]);
 
     const onChange = (value: boolean) => {
         setIsActive(value);
+    };
+
+    const handleDeleteCar = async (id: number, title: string) => {
+        if (!id) return;
+
+        try {
+            const res = await deleteCar(id);
+            if (res.code === HttpStatusCode.Ok) {
+                Swal.fire({
+                    icon: 'success',
+                    title: `Xóa thành công xe ${title}`,
+                });
+                const newData = [...data].filter((car) => car.id !== id);
+                setData(newData);
+            }
+        } catch (error) {
+            console.log(error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+            });
+        }
     };
 
     const carColumns = [
@@ -87,38 +113,36 @@ const AllCar: React.FC = () => {
                 );
             },
         },
-        {
-            title: 'Features',
-            dataIndex: 'car_features',
-            key: 'car_features',
-            render: (features: ICarFeature[]) => (
-                <div>
-                    {features &&
-                        features.map((feature) => (
-                            <img
-                                key={feature.id}
-                                src={feature.image_url}
-                                alt={feature.color}
-                                className="w-[50px] object-cover h-[50px] mr-[10px] rounded-sm"
-                            />
-                        ))}
-                </div>
-            ),
-        },
+
         {
             title: 'Hành động',
             key: 'actions',
             render: (data: ICar) => {
                 return (
-                    <Button
-                        type="primary"
-                        onClick={() => {
-                            setCarIdView(data.id);
-                            setIsModalOpen(true);
-                        }}
-                    >
-                        Xem thông tin
-                    </Button>
+                    <div className="flex justify-center items-center gap-[4px]">
+                        <ModalCofirmDelete
+                            onDelete={() => handleDeleteCar(data.id, data.title)}
+                            title={data?.title || ''}
+                        />
+                        <Button
+                            type="primary"
+                            onClick={() => {
+                                setCarIdView(data.id);
+                                setIsModalOpen(true);
+                            }}
+                        >
+                            Xem thông tin
+                        </Button>
+                        <button
+                            className="text-white bg-orange-400 rounded-[8px] px-[8px] py-[4px] hover:opacity-[0.7]"
+                            onClick={() => {
+                                setCarIdView(data.id);
+                                setIsOpenUpdate(true);
+                            }}
+                        >
+                            Cập nhật
+                        </button>
+                    </div>
                 );
             },
         },
@@ -161,6 +185,14 @@ const AllCar: React.FC = () => {
             {carIdView && isModalOpen && (
                 <ModalCar car_id={carIdView} handleCancel={handleCancel} isModalOpen={isModalOpen} />
             )}
+            {carIdView && isOpenUpdate && (
+                <ModalUpdateCar
+                    car_id={carIdView}
+                    handleCancel={() => setIsOpenUpdate(false)}
+                    isModalOpen={isOpenUpdate}
+                    onReload={() => setIsReload(!isReload)}
+                />
+            )}
             <Select
                 style={{
                     marginBottom: 10,
@@ -186,18 +218,20 @@ const AllCar: React.FC = () => {
             />
             <div className="w-[100%] overflow-auto">
                 <div className="">
-                    <Table
-                        rowKey="id"
-                        dataSource={data}
-                        columns={carColumns}
-                        loading={loading}
-                        pagination={{
-                            current: meta.currentPage,
-                            pageSize: 5,
-                            total: meta.totalIteams,
-                            onChange: (page: number) => fetchData(page),
-                        }}
-                    />
+                    {data && data.length > 0 ? (
+                        <Table
+                            rowKey="id"
+                            dataSource={data}
+                            columns={carColumns}
+                            loading={loading}
+                            pagination={{
+                                current: meta.currentPage,
+                                pageSize: 5,
+                                total: meta.totalIteams,
+                                onChange: (page: number) => fetchData(page),
+                            }}
+                        />
+                    ) : null}
                 </div>
             </div>
         </>

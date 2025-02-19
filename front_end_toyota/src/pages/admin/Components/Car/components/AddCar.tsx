@@ -1,20 +1,27 @@
-import { Button, Checkbox, Form, Input, InputNumber, Space } from 'antd';
+import { Button, Checkbox, Form, Input, InputNumber, Select, Space } from 'antd';
 import { HttpStatusCode } from 'axios';
 import React from 'react';
-import processENV from '../../../../../configs/process';
 import { uploadFileService } from '../../../../../services/uploadService';
 import { ICar } from '../../../../../utils/interface';
 import ButtonClose from '../../../../product/component/common/ButtonClose/ButtonClose';
 import { PlusOutlined } from '@ant-design/icons';
+import { addCarService } from '../../../../../services/carService';
+import Swal from 'sweetalert2';
+import { getLinkImage } from '../../../../../helpers/getLinkImage';
 
 const AddCarPage: React.FC = () => {
     const [form] = Form.useForm();
 
     const onFinish = async (values: ICar) => {
-        console.log('Dữ liệu form:', values);
-
         try {
-            // const data  = values.car_features =
+            const res = await addCarService(values);
+            if (res.code === HttpStatusCode.Ok) {
+                form.resetFields();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Bạn đã thêm xe thành công',
+                });
+            }
         } catch (error) {
             console.log(error);
         }
@@ -32,7 +39,7 @@ const AddCarPage: React.FC = () => {
                 form.setFieldsValue({
                     car_features: {
                         [target]: {
-                            url_public: res.data.url_public,
+                            image_url: res.data.url_public,
                         },
                     },
                 });
@@ -44,7 +51,7 @@ const AddCarPage: React.FC = () => {
 
     const onDeleteFile = (target: number) => {
         const features = form.getFieldValue('car_features');
-        features[target].url_public = '';
+        features[target].image_url = '';
         form.setFieldsValue({ car_features: features });
     };
 
@@ -80,7 +87,10 @@ const AddCarPage: React.FC = () => {
                     />
                 </Form.Item>
                 <Form.Item label="Model" name="model" rules={[{ required: true, message: 'Vui lòng nhập model' }]}>
-                    <Input placeholder="Nhập model" />
+                    <Select placeholder="Chọn loại xe">
+                        <Select.Option value="electric">Xe điện</Select.Option>
+                        <Select.Option value="gasoline">Xe xăng</Select.Option>
+                    </Select>
                 </Form.Item>
                 <Form.Item
                     label="Battery Capacity"
@@ -198,14 +208,25 @@ const AddCarPage: React.FC = () => {
                     </Form.Item>
                 </div>
                 <h3 className="text-2xl font-semibold mt-8 mb-4">Tính năng của xe</h3>
-                <Form.List name="car_features">
+                <Form.List
+                    name="car_features"
+                    rules={[
+                        {
+                            validator: async (_, value) => {
+                                if (!value || value.length === 0) {
+                                    return Promise.reject(new Error('Cần ít nhất một mục!'));
+                                }
+                            },
+                        },
+                    ]}
+                >
                     {(fields, { add, remove }) => (
                         <div>
                             {fields.map(({ key, name, ...restField }) => {
-                                const image = form.getFieldValue(['car_features', name, 'url_public']);
+                                const image = form.getFieldValue(['car_features', name, 'image_url']);
 
                                 return (
-                                    <div>
+                                    <div key={key}>
                                         <Space
                                             key={key}
                                             direction="vertical"
@@ -213,8 +234,7 @@ const AddCarPage: React.FC = () => {
                                             style={{ padding: '16px', marginBottom: '60px' }}
                                         >
                                             <div>
-                                                {/* <Form.Item {...restField} name={[name, 'url_public']}> */}
-                                                <Form.Item {...restField} name={[name, 'url_public']} hidden>
+                                                <Form.Item {...restField} name={[name, 'image_url']} hidden>
                                                     <Input />
                                                 </Form.Item>
                                                 <Form.Item>
@@ -231,7 +251,7 @@ const AddCarPage: React.FC = () => {
                                                             <ul>
                                                                 <li className="flex items-center gap-3 border-amber-200 border rounded-md my-1">
                                                                     <img
-                                                                        src={`${processENV.VITE_URL_BACKEND}${image}`}
+                                                                        src={getLinkImage(image)}
                                                                         className="w-[50px] object-cover h-[50px]"
                                                                         alt=""
                                                                     />
@@ -254,7 +274,12 @@ const AddCarPage: React.FC = () => {
                                             >
                                                 <Input placeholder="Nhập color" />
                                             </Form.Item>
-                                            <Form.Item label="Active" name="is_active" valuePropName="checked">
+                                            <Form.Item
+                                                {...restField}
+                                                label="Active"
+                                                name={[name, 'is_active']}
+                                                valuePropName="checked"
+                                            >
                                                 <Checkbox />
                                             </Form.Item>
                                             <div className="absolute top-[-30px] right-0">

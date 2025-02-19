@@ -12,6 +12,7 @@ export class CreateCarDTO {
     meta_sub_title: string;
 
     @IsBoolean()
+    @IsOptional()
     is_show_form: boolean;
 
     @IsNotEmpty({ message: 'Mô tả không được để trống' })
@@ -110,11 +111,15 @@ export class CreateCarDTO {
     @IsString({ message: 'Key Code phải là một chuỗi' })
     key_code?: string;
 
-    images: [
+    @IsOptional()
+    @IsBoolean()
+    is_active: boolean;
+
+    car_features: [
         {
             image_url: string;
             color: string;
-            is_active: boolean;
+            is_active?: boolean;
         },
     ];
 }

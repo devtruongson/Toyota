@@ -3,6 +3,7 @@ import { CreateCarDTO } from '~/dtos/CreateCar.dto';
 import Car from '~/models/Car';
 import CarFeature from '~/models/CarFeature';
 import { ResponseHandler } from '~/utils/Response';
+import { Request } from 'express';
 
 class CarService {
     async handleCreateCar(data: CreateCarDTO) {
@@ -11,7 +12,7 @@ class CarService {
                 ...data,
             })) as any;
             await Promise.all(
-                data.images.map(async (image) => {
+                data.car_features.map(async (image) => {
                     await CarFeature.create({
                         ...image,
                         car_id: car.id,
@@ -185,9 +186,60 @@ class CarService {
 
             const cars = await Car.findAll({
                 where: { model: model, is_active: true },
+                include: [
+                    {
+                        model: CarFeature,
+                        as: 'car_features',
+                    },
+                ],
             });
 
             return ResponseHandler(httpStatus.OK, cars, ' Successfully');
+        } catch (error) {
+            console.log(error);
+            Promise.reject(ResponseHandler(httpStatus.BAD_GATEWAY, null, 'có lỗi xảy ra!'));
+        }
+    }
+
+    async handleDeleteCar(id: number) {
+        try {
+            await Car.destroy({
+                where: { id: id },
+            });
+            return ResponseHandler(httpStatus.OK, null, ' Successfully');
+        } catch (error) {
+            console.log(error);
+            Promise.reject(ResponseHandler(httpStatus.BAD_GATEWAY, null, 'có lỗi xảy ra!'));
+        }
+    }
+
+    async handleUpdateCarService(req: Request) {
+        try {
+            const id = req.body.id;
+            if (!id) {
+                return ResponseHandler(httpStatus.BAD_REQUEST, null, 'BAD REQUEST MISSING PARM car_id');
+            }
+            await Car.update(
+                { ...req.body },
+                {
+                    where: { id: id },
+                },
+            );
+            return ResponseHandler(httpStatus.OK, null, ' Successfully');
+        } catch (error) {
+            console.log(error);
+            Promise.reject(ResponseHandler(httpStatus.BAD_GATEWAY, null, 'có lỗi xảy ra!'));
+        }
+    }
+
+    async handleCreateFeature(req: Request) {
+        try {
+            const id = req.body.car_id;
+            if (!id) {
+                return ResponseHandler(httpStatus.BAD_REQUEST, null, 'BAD REQUEST MISSING PARM car_id');
+            }
+            await CarFeature.create({ ...req.body });
+            return ResponseHandler(httpStatus.OK, null, ' Successfully');
         } catch (error) {
             console.log(error);
             Promise.reject(ResponseHandler(httpStatus.BAD_GATEWAY, null, 'có lỗi xảy ra!'));

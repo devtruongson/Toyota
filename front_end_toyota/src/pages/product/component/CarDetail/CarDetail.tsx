@@ -11,6 +11,9 @@ import Installment from '../common/Installment/Installment';
 import LabelCustom from '../common/LabelCustom/LabelCustom';
 import TableParameter from '../common/TableParameter/TableParameter';
 import TableIntorior from '../common/TableIntorior/TableIntorior';
+import DetailInfo from '../common/DetailInfo/DetailInfo';
+import SpecialOffers from '../common/SpecialOffers/SpecialOffers';
+import { getLinkImage } from '../../../../helpers/getLinkImage';
 
 const CarDetail = () => {
     const carId = useAppSelector((state) => state.currentCar);
@@ -32,7 +35,11 @@ const CarDetail = () => {
             const res = await getDetailCarService(carId as number);
             if (res.code === HttpStatusCode.Ok) {
                 setCar(res.data);
-                setImageActive(res?.data?.car_features[0]?.image_url || defaultImageCar);
+                setImageActive(
+                    res?.data?.car_features[0]?.image_url
+                        ? getLinkImage(res?.data?.car_features[0]?.image_url)
+                        : defaultImageCar,
+                );
             }
         };
 
@@ -63,9 +70,9 @@ const CarDetail = () => {
                                                       <div
                                                           key={item.id}
                                                           className=""
-                                                          onClick={() => setImageActive(item.image_url)}
+                                                          onClick={() => setImageActive(getLinkImage(item.image_url))}
                                                       >
-                                                          <img src={item.image_url} alt="image" />
+                                                          <img src={getLinkImage(item.image_url)} alt="image" />
                                                       </div>
                                                   );
                                               })
@@ -114,47 +121,13 @@ const CarDetail = () => {
                                 </div>
                             </Col>
                             <Col span={12} className="">
-                                <div className="bg-white py-[8px] px-[12px] h-full rounded-[4px] shadow">
-                                    <p className="text-[20px] uppercase mb-[20px]">Giá thuê pin {car.title}</p>
-                                    <p className="mb-[10px]">
-                                        Giá thuê pin {car.title} là số tiền hàng tháng khách hàng phải trả cho VinFast
-                                        khi mua xe theo hình thức thuê pin.
-                                    </p>
-                                    <p className="mb-[10px]">
-                                        Giá thuê pin này phụ thuộc vào chính sách bán hàng ở tùng thời điểm. Hiện tại,
-                                        giá thuê pin {car.title} phụ thuộc vào quãng đường di chuyển theo tháng của
-                                        khách hàng.
-                                    </p>
-                                    <ul className="mb-[10px]">
-                                        <li>{`• Số Km/ tháng <=1.500Km: phí thuê pin là: 2.300.000 VNĐ.`}</li>
-                                        <li>{`• Số Km/ tháng >1.500Km và <3.000Km: phí thuê pin là: 3.500.000 VNĐ.`}</li>
-                                        <li>{`• Số Km/ tháng >3.500Km: phí thuê pin là: 5.800.000 VNĐ.`}</li>
-                                    </ul>
-                                    <p className="text-center italic">(Đã bao gồm VAT)</p>
-                                </div>
+                                <DetailInfo title={car.title} type={car.model} />
                             </Col>
                         </Row>
                     </div>
 
                     <div className="w-full flex justify-center py-[20px]">
-                        <div className="bg-black/30 px-[40px] pt-[16px] pb-[16px] rounded-lg w-[60%]">
-                            <h2 className="text-white font-bold text-lg text-center mb-[20px]">ƯU ĐÃI NGẬP TRÀN</h2>
-                            <ul className="text-white">
-                                <li className="list-disc">Tặng 10 triệu đồng vào tài khoản VinClub/xe</li>
-                                <li className="list-disc">
-                                    Gửi xe miễn phí (dưới 5 tiếng) và ưu tiên đỗ tại mọi địa điểm thuộc hệ sinh thái
-                                    Vingroup.
-                                </li>
-                                <li className="list-disc">
-                                    Sạc pin miễn phí tại các trạm sạc V-GREEN tới hết 01/07/2025.
-                                </li>
-                                <li className="list-disc">
-                                    Cư dân Vinhomes sở hữu VF 5 Plus sẽ có đặc quyền gửi xe và sạc điện miễn phí ở các
-                                    bãi đỗ của Vinhomes trong vòng 2 năm và hỗ trợ lắp sạc tại nhà với chi phí hỗ trợ
-                                    lên đến 10.000.000 VNĐ/hộ.
-                                </li>
-                            </ul>
-                        </div>
+                        <SpecialOffers type={car.model} />
                     </div>
 
                     <div className="w-full flex justify-center" style={{ background: colors.bg }}>
