@@ -39,4 +39,5 @@ export interface IQueryForm {
     status?: 'pending' | 'approved';
     q?: string;
     sort?: any;
+    type: 'BOOK_DEMO' | 'TEST_DRIVE';
 }

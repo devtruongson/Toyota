@@ -19,8 +19,8 @@ const menuNav: MenuProps['items'] = [
     },
     {
         icon: LaptopOutlined,
-        title: 'Quản lí đơn hàng',
-        url: 'order',
+        title: 'Quản lí form',
+        url: 'form',
     },
     {
         icon: LaptopOutlined,

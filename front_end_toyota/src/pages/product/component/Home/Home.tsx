@@ -1,15 +1,15 @@
-import Slider from 'react-slick';
-import './Home.css';
-import { bannerHomes, naviHome, reasonChooses } from '../../../../constants';
-import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { IBlog, ICar } from '../../../../utils/interface';
-import { getAllCar } from '../../../../services/carService';
 import { HttpStatusCode } from 'axios';
-import CardCar from '../common/CardCar/CardCar';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import Slider from 'react-slick';
+import { bannerHomes, naviHome, reasonChooses } from '../../../../constants';
 import { colors } from '../../../../constants/colors';
 import { getAllBlogs } from '../../../../services/blogService';
+import { getAllCar } from '../../../../services/carService';
+import { IBlog, ICar } from '../../../../utils/interface';
 import CardBlog from '../CardBlog/CardBlog';
+import CardCar from '../common/CardCar/CardCar';
+import './Home.css';
 const Home = () => {
     const settings = {
         dots: true,
@@ -37,13 +37,13 @@ const Home = () => {
     }, []);
 
     return (
-        <div className="w-full bg-[#f4f8fa]">
-            <div className="w-full mx-auto banner">
+        <div className="w-[100%] overflow-x-hidden bg-[#f4f8fa]">
+            <div className="w-[100%] mx-auto banner">
                 <Slider {...settings}>
                     {bannerHomes.map((item, index) => {
                         return (
-                            <div key={index}>
-                                <img src={item} alt={`Slide ${index}`} />
+                            <div className="w-full" key={index}>
+                                <img src={item} className="object-cover" alt={`Slide ${index}`} />
                             </div>
                         );
                     })}

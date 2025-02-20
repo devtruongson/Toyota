@@ -8,26 +8,36 @@ import {
     YoutubeOutlined,
 } from '@ant-design/icons';
 import { Button, Dropdown, Menu, Popover } from 'antd';
-import slug from 'slug';
+import { HttpStatusCode } from 'axios';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { logOutAction, saveCate, saveCurrentcar } from '../../app/slices/appSlice';
 import processENV from '../../configs/process';
-import { Link, useNavigate } from 'react-router-dom';
+import { naviHeader } from '../../constants';
 import { routes } from '../../constants/routes';
-import { useEffect, useState } from 'react';
-import { getAllCateActive } from '../../services/cateService';
-import { HttpStatusCode } from 'axios';
 import { formatLink } from '../../helpers/formatLink';
 import { getAllCar } from '../../services/carService';
+import { getAllCateActive } from '../../services/cateService';
 import { ICar } from '../../utils/interface';
-import { naviHeader } from '../../constants';
+import BookCarModal from './ModalCar';
 
 const Header = () => {
     const isLoginIn = useAppSelector((state) => state.auth.IsLoginIn);
     const user = useAppSelector((state) => state.auth.user);
     const cates = useAppSelector((state) => state.cates);
     const [cars, setCars] = useState<ICar[]>([]);
+    const [visible, setVisible] = useState(false);
+
+    const handleOpen = () => {
+        setVisible(true);
+    };
+
+    // Đóng modal
+    const handleClose = () => {
+        setVisible(false);
+    };
 
     const dispatch = useAppDispatch();
 
@@ -99,6 +109,7 @@ const Header = () => {
 
     return (
         <header className="bg-white shadow-md z-[99] relative header-main">
+            <BookCarModal handleClose={handleClose} visible={visible} />
             <div className="bg-[#1464f4] text-[#fff] py-2">
                 <div className="container mx-auto flex justify-between items-center">
                     <ul className="p-0 m-0 flex gap-[20px]">
@@ -130,9 +141,7 @@ const Header = () => {
                                         <Popover content={popoverContent} trigger="hover" placement="bottomRight">
                                             <a
                                                 className="inline-flex items-center gap-2 cursor-pointer"
-                                                href={`/profile/${user.id}?slug=${slug(
-                                                    user.first_name + user.last_name + user.avatar,
-                                                )}`}
+                                                href={`/profile/${user.id}`}
                                             >
                                                 <img
                                                     alt={user.first_name}
@@ -209,15 +218,32 @@ const Header = () => {
                                     </Link>
                                 );
                             })}
+                        <li>
+                            <Link to={`/chargings`}>TRẠM SẠC</Link>
+                        </li>
                     </ul>
                 </nav>
 
                 {/* Buttons */}
                 <div className="flex space-x-4">
-                    <Button type="primary" className="bg-blue-600 border-none hover:bg-blue-700">
+                    <Button
+                        onClick={() => (window.location.href = '/test-drive')}
+                        type="primary"
+                        className="bg-blue-600 border-none hover:bg-blue-700"
+                    >
                         LÁI THỬ
                     </Button>
-                    <Button type="primary" className="bg-blue-600 border-none hover:bg-blue-700">
+                    <Button
+                        onClick={() => {
+                            if (isLoginIn) {
+                                handleOpen();
+                            } else {
+                                window.location.href = '/login';
+                            }
+                        }}
+                        type="primary"
+                        className="bg-blue-600 border-none hover:bg-blue-700"
+                    >
                         ĐẶT XE ONLINE
                     </Button>
                 </div>

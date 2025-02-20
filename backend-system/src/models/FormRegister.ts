@@ -1,5 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../configs/connectDB';
+import Car from './Car';
 import User from './User';
 
 class FormRegister extends Model {}
@@ -51,6 +52,17 @@ FormRegister.belongsTo(User, {
     foreignKey: 'user_id',
     targetKey: 'id',
     as: 'user_data',
+});
+
+Car.hasMany(FormRegister, {
+    foreignKey: 'car_id',
+    as: 'list_form',
+});
+
+FormRegister.belongsTo(Car, {
+    foreignKey: 'car_id',
+    targetKey: 'id',
+    as: 'car_data',
 });
 
 export default FormRegister;

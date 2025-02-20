@@ -1,6 +1,7 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
 import httpStatus from 'http-status';
+import https from 'https';
 import { Op } from 'sequelize';
 import { RegisterFormDTO } from '~/dtos/RegisterForm.dto';
 import { SendEmailToClientDTO } from '~/dtos/SendEmailToClient.dto';
@@ -13,6 +14,10 @@ import { ResponseHandler } from '~/utils/Response';
 import EmailService from './EmailService';
 dotenv.config();
 
+const axiosInstance = axios.create({
+    httpsAgent: new https.Agent({ family: 4 }),
+    timeout: 10000,
+});
 class FormRegisterService {
     async registerFormService(data: RegisterFormDTO) {
         try {
@@ -43,10 +48,23 @@ class FormRegisterService {
               - Thông tin thêm: ${data.note}
               - Thời gian: ${new Date(data.time).toLocaleString()}
           `;
-            await axios.post(`https://api.telegram.org/bot${process.env.TOKEN_BOT_TELEGRAM}/sendMessage`, {
-                chat_id: process.env.CHAT_ID_TELE,
-                text: html,
-            });
+
+            try {
+                await axiosInstance.post(`https://api.telegram.org/bot${process.env.TOKEN_BOT_TELEGRAM}/sendMessage`, {
+                    chat_id: process.env.CHAT_ID_TELE,
+                    text: html,
+                });
+                await FormRegister.create({
+                    user_id: data.user_id,
+                    car_id: data.car_id,
+                    note: data.note,
+                    time: String(data.time),
+                    type: data.type,
+                    status: false,
+                });
+            } catch (error) {
+                console.log(error);
+            }
 
             return ResponseHandler(httpStatus.OK, null, 'Register form successfully');
         } catch (err) {
@@ -58,7 +76,9 @@ class FormRegisterService {
     async handleGetAllForm(query: IQueryForm) {
         try {
             let data;
-            const queryOptions: any = {};
+            const queryOptions: any = {
+                type: query.type,
+            };
             const orderOpion: any = {};
             if (query.status) {
                 queryOptions['status'] = query.status === 'approved' ? true : false;
@@ -89,6 +109,10 @@ class FormRegisterService {
                                 exclude: ['password'],
                             },
                         },
+                        {
+                            model: Car,
+                            as: 'car_data',
+                        },
                     ],
                 });
             } else {
@@ -102,6 +126,10 @@ class FormRegisterService {
                             attributes: {
                                 exclude: ['password'],
                             },
+                        },
+                        {
+                            model: Car,
+                            as: 'car_data',
                         },
                     ],
                 });
@@ -141,7 +169,7 @@ class FormRegisterService {
                 html: data.html,
             });
 
-            return ResponseHandler(httpStatus.OK, null, 'Send Email Successfully'); 
+            return ResponseHandler(httpStatus.OK, null, 'Send Email Successfully');
         } catch (err) {
             console.log(err);
             Promise.reject(ResponseHandler(httpStatus.BAD_GATEWAY, null, 'có lỗi xảy ra!'));

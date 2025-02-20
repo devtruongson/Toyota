@@ -1,4 +1,9 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+
+export enum RegisterType {
+    TEST_DRIVE = 'TEST_DRIVE',
+    BOOK_DEMO = 'BOOK_DEMO',
+}
 
 export class RegisterFormDTO {
     @IsNumber()
@@ -13,4 +18,7 @@ export class RegisterFormDTO {
     @IsNotEmpty()
     @IsNumber()
     time: number;
+
+    @IsEnum(RegisterType)
+    type: string;
 }

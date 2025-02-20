@@ -4,6 +4,7 @@ import { Op } from 'sequelize';
 import { loginDto } from '~/dtos/login.dto';
 import { comparePassword, endCodePassword } from '~/helpers/bcrypt';
 import { handleCreateToken } from '~/middleware/jwtActions';
+import Car from '~/models/Car';
 import FormRegister from '~/models/FormRegister';
 import Order from '~/models/Order';
 import User from '~/models/User';
@@ -227,9 +228,12 @@ class UserService {
         }
     }
 
-    async getAllForm(email: string) {
+    async getAllForm(email: string, type: string) {
         try {
             const data = await FormRegister.findAll({
+                where: {
+                    type: type,
+                },
                 include: [
                     {
                         model: User,
@@ -240,6 +244,10 @@ class UserService {
                         attributes: {
                             exclude: ['password'],
                         },
+                    },
+                    {
+                        model: Car,
+                        as: 'car_data',
                     },
                 ],
             });

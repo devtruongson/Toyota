@@ -14,7 +14,7 @@ ChargingStations.init(
             allowNull: false,
         },
         location: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT('long'),
             allowNull: false,
         },
         power_kw: {

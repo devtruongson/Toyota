@@ -1,9 +1,11 @@
 import { routes } from './routes';
 
 export const bannerHomes = [
-    'https://vinfastnewway.com.vn/wp-content/uploads/2022/08/vinfast-newway-thong-bao-nghi-le-2-9-2022.jpg',
-    'https://vinfastnewway.com.vn/wp-content/uploads/2022/08/vinfast-newway-thong-bao-nghi-le-2-9-2022.jpg',
-    'https://vinfastnewway.com.vn/wp-content/uploads/2022/08/vinfast-newway-thong-bao-nghi-le-2-9-2022.jpg',
+    'https://www.vinfastnewway.com.vn/wp-content/uploads/2025/01/thong-bao-nghi-tet-2025.jpg',
+    'https://www.vinfastnewway.com.vn/wp-content/uploads/2024/11/vinfast-hang-xe-so-1-viet-nam.jpg',
+    'https://www.vinfastnewway.com.vn/wp-content/uploads/2024/10/slide-thang-102024.jpg',
+    'https://www.vinfastnewway.com.vn/wp-content/uploads/2023/02/slide-home-vfnewway2.jpg',
+    'https://www.vinfastnewway.com.vn/wp-content/uploads/2023/02/slide-home-vfnewway4.jpg',
 ];
 
 export const logoVinfast = 'https://vinfastnewway.com.vn/wp-content/uploads/2019/08/menu_vinfast.png';

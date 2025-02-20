@@ -84,7 +84,8 @@ class UserController {
     async getAllForm(req: Request, res: Response) {
         try {
             const email = req.body.token_author;
-            const data = await userService.getAllForm(email);
+            const type = req.query.type === 'BOOK_DEMO' ? 'BOOK_DEMO' : 'TEST_DRIVE';
+            const data = await userService.getAllForm(email, type);
             return res.status(httpStatus.OK).json(data);
         } catch (err) {
             console.log(err);

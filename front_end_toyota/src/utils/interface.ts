@@ -169,3 +169,21 @@ export interface ICate {
     is_active: boolean;
     path: string;
 }
+
+export interface ICharging {
+    id: number;
+    name: string;
+    location: string;
+    power_kw: string;
+}
+
+export interface IRegisterForm {
+    user_id: number;
+    car_id: number;
+    note: string;
+    time: number;
+    type: 'BOOK_DEMO' | 'TEST_DRIVE';
+    user_data?: IUser;
+    status: boolean;
+    car_data: ICar[];
+}

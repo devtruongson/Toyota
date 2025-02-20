@@ -10,12 +10,12 @@ import { sequelize } from './connectDB';
 
 (async () => {
     try {
-        await sequelize.sync(); // Đồng bộ hóa các mô hình với cơ sở dữ liệu
+        await sequelize.sync();
         const modals = [User, Blog, Car, CarFeature, Cate, ChargingStations, FormRegister, Order];
         await Promise.all(modals.map((modal) => modal.sync()));
     } catch (error) {
         console.error('Error creating tables:', error);
     } finally {
-        sequelize.close(); // Đóng kết nối sau khi hoàn thành
+        sequelize.close();
     }
 })();

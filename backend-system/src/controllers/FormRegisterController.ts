@@ -26,9 +26,12 @@ class FormRegisterController {
             const dataQuery: IQueryForm = {
                 q: req.query.q ? req.query.q.toString() : '',
                 sort: req.query.sort === 'asc' || req.query.sort === 'desc' ? req.query.sort : 'asc',
-                status:
-                    req.query.status === 'pending' || req.query.status === 'approved' ? req.query.status : 'pending',
+                type: req.query.type === 'BOOK_DEMO' ? 'BOOK_DEMO' : 'TEST_DRIVE',
             };
+            if (req.query.status) {
+                dataQuery['status'] =
+                    req.query.status === 'pending' || req.query.status === 'approved' ? req.query.status : 'pending';
+            }
             const data = await FormRegisterService.handleGetAllForm(dataQuery);
             return res.status(httpStatus.OK).json(data);
         } catch (err) {

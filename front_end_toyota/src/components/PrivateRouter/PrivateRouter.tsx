@@ -10,7 +10,7 @@ export default function PrivateRouter({ children, role }: { children: ReactNode;
         return <>{children}</>;
     }
 
-    if (user && role === 'user' && user.role === 'user') {
+    if (user && role === 'user' && (user.role === 'user' || user.role === 'admin')) {
         return <>{children}</>;
     }
 
