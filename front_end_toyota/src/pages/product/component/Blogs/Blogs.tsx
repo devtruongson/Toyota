@@ -46,6 +46,7 @@ const Blogs = () => {
                                     className="h-full flex"
                                 >
                                     <CardBlog
+                                        id={blog.id}
                                         img={blog.thumbnail}
                                         title={blog.title}
                                         description={blog.meta_description}

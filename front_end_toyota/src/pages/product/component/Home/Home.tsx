@@ -128,6 +128,7 @@ const Home = () => {
                                     ? blogs.map((blog) => {
                                           return (
                                               <CardBlog
+                                                  id={blog.id}
                                                   isVertical
                                                   key={blog.id}
                                                   title={blog.title}

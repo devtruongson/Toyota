@@ -48,3 +48,8 @@ export const updateBlog = async (data: IBlog): Promise<IRes<number[]>> => {
     const dataRes = (await axios.put(`/v1/chuk/blog`, data)) as IRes<number[]>;
     return dataRes;
 };
+
+export const getDetailBlogService = async (id: number): Promise<IRes<IBlog>> => {
+    const dataRes = (await axios.get(`/v1/chuk/blog/${id}`)) as IRes<IBlog>;
+    return dataRes;
+};

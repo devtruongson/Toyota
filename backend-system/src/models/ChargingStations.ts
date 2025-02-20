@@ -20,7 +20,7 @@ ChargingStations.init(
         power_kw: {
             type: DataTypes.STRING,
             allowNull: false,
-            defaultValue: true,
+            // defaultValue: true,
         },
     },
     {

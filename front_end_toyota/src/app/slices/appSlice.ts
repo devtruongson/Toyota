@@ -6,6 +6,7 @@ const initialState: {
     cates: ICate[];
     currentCar: number | null;
     carActive: ICar[];
+    currentBlog: number | null;
 } = {
     auth: {
         IsLoginIn: false,
@@ -15,6 +16,7 @@ const initialState: {
     cates: [],
     currentCar: null,
     carActive: [],
+    currentBlog: null,
 };
 
 export const appSlice = createSlice({
@@ -50,9 +52,21 @@ export const appSlice = createSlice({
         saveCarActive: (state, action) => {
             state.carActive = action.payload;
         },
+
+        saveBlog: (state, action) => {
+            state.currentBlog = action.payload;
+        },
     },
 });
 
-export const { loginSucessAction, logOutAction, updateTokens, saveCate, deleteCate, saveCurrentcar, saveCarActive } =
-    appSlice.actions;
+export const {
+    loginSucessAction,
+    logOutAction,
+    updateTokens,
+    saveCate,
+    deleteCate,
+    saveCurrentcar,
+    saveCarActive,
+    saveBlog,
+} = appSlice.actions;
 export default appSlice.reducer;
