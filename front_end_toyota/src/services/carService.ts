@@ -35,3 +35,31 @@ export const getCarBuyModel = async (model: ModelType): Promise<IRes<ICar[]>> =>
     const dataRes = (await axios.get(`/v1/car/get-by-model?model=${model}`)) as IRes<ICar[]>;
     return dataRes;
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const addCarService = async (data: any): Promise<IRes<null>> => {
+    const dataRes = (await axios.post('/v1/car', data)) as IRes<null>;
+    return dataRes;
+};
+
+export const deleteCar = async (id: number): Promise<IRes<null>> => {
+    const dataRes = (await axios.delete(`/v1/car/${id}`)) as IRes<null>;
+    return dataRes;
+};
+
+export const deleteFeature = async (id: number): Promise<IRes<null>> => {
+    const dataRes = (await axios.delete(`/v1/car/image/${id}`)) as IRes<null>;
+    return dataRes;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const updateCar = async (data: any): Promise<IRes<null>> => {
+    const dataRes = (await axios.patch(`/v1/car/update-info`, data)) as IRes<null>;
+    return dataRes;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const createFeature = async (data: any): Promise<IRes<null>> => {
+    const dataRes = (await axios.post(`/v1/car/feature`, data)) as IRes<null>;
+    return dataRes;
+};

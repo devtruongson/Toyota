@@ -20,9 +20,11 @@ Car.init(
         is_show_form: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
+            defaultValue: false,
         },
         url_video_demo: {
             type: DataTypes.TEXT('long'),
+            defaultValue: 'https://www.youtube.com/embed/AucqJOJ4i1k',
             allowNull: false,
         },
         description: {

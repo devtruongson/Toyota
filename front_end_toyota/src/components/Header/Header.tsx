@@ -9,11 +9,11 @@ import {
 } from '@ant-design/icons';
 import { Button, Dropdown, Menu, Popover } from 'antd';
 import { HttpStatusCode } from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { logOutAction, saveCate, saveCurrentcar } from '../../app/slices/appSlice';
+import { logOutAction, saveCarActive, saveCate, saveCurrentcar } from '../../app/slices/appSlice';
 import processENV from '../../configs/process';
 import { naviHeader } from '../../constants';
 import { routes } from '../../constants/routes';
@@ -38,6 +38,7 @@ const Header = () => {
     const handleClose = () => {
         setVisible(false);
     };
+    const { cates } = useAppSelector((state) => state);
 
     const dispatch = useAppDispatch();
 
@@ -88,7 +89,7 @@ const Header = () => {
 
     useEffect(() => {
         const fetch = async () => {
-            const [resCate, resCar] = await Promise.all([getAllCateActive(), getAllCar(1, 6, true)]);
+            const [resCate, resCar] = await Promise.all([getAllCateActive(), getAllCar(1, 30, true)]);
             if (resCate.code === HttpStatusCode.Ok) {
                 dispatch(
                     saveCate(
@@ -99,7 +100,7 @@ const Header = () => {
                 );
             }
             if (resCar.code === HttpStatusCode.Ok) {
-                setCars(resCar.data.items);
+                dispatch(saveCarActive(resCar.data.items));
             }
         };
 
@@ -192,17 +193,7 @@ const Header = () => {
                             </Dropdown>
                         </li>
                         <li>
-                            <Dropdown
-                                overlay={
-                                    <PoppverCommon
-                                        data={cars.map((item) => ({
-                                            title: item.title,
-                                            link: `${routes.products}/${formatLink(item.title)}`,
-                                            id: item.id,
-                                        }))}
-                                    />
-                                }
-                            >
+                            <Dropdown overlay={<PoppverCars />}>
                                 <Link to={routes.products} className="hover:text-blue-600 flex items-center">
                                     SẢN PHẨM <DownOutlined className="ml-1" />
                                 </Link>
@@ -286,6 +277,84 @@ const PoppverCommon = ({ data }: PoppverCommonProps) => {
                                           border: '1px solid #f4f4f4',
                                       }}
                                       onClick={() => handleNavigate(item.link, item.id)}
+                                  >
+                                      {item.title}
+                                  </Menu.Item>
+                              );
+                          })
+                        : null}
+                </div>
+            </div>
+        </Menu>
+    );
+};
+
+const PoppverCars = () => {
+    const { carActive } = useAppSelector((state) => state);
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+
+    const handleNavigate = (link: string, id?: number) => {
+        if (id) {
+            dispatch(saveCurrentcar(id));
+        }
+        navigate(link);
+    };
+    const cars = useMemo(() => {
+        const newCar = carActive.map((item) => {
+            return { ...item, link: '/san-pham/' + formatLink(item.title) };
+        });
+        return {
+            electric: newCar.filter((item) => item.model === 'electric'),
+            gasoline: newCar.filter((item) => item.model !== 'electric'),
+        };
+    }, [carActive]);
+    return (
+        <Menu className="w-72 shadow-lg rounded-lg " style={{ background: 'white', padding: '0' }}>
+            <div className="bg-white flex justify-center items-stretch w-[100%]">
+                <div className="bg-white w-[50%]">
+                    <div className="py-[8px]">
+                        <p className="uppercase text-center font-[500]">Động cơ điện</p>
+                    </div>
+                    {cars.electric && cars.electric.length > 0
+                        ? cars.electric.map((item) => {
+                              return (
+                                  <Menu.Item
+                                      key="1"
+                                      className="py-[20px]"
+                                      style={{
+                                          background: 'white',
+                                          paddingLeft: '10px',
+                                          paddingTop: '10px',
+                                          paddingBottom: '10px',
+                                          border: '1px solid #f4f4f4',
+                                      }}
+                                      onClick={() => handleNavigate(item?.link, item.id)}
+                                  >
+                                      {item.title}
+                                  </Menu.Item>
+                              );
+                          })
+                        : null}
+                </div>
+                <div className="bg-white w-[50%]">
+                    <div className="py-[8px]">
+                        <p className="uppercase text-center font-[500]">Động cơ xăng</p>
+                    </div>
+                    {cars.gasoline && cars.gasoline.length > 0
+                        ? cars.gasoline.map((item) => {
+                              return (
+                                  <Menu.Item
+                                      key="1"
+                                      className="py-[20px]"
+                                      style={{
+                                          background: 'white',
+                                          paddingLeft: '10px',
+                                          paddingTop: '10px',
+                                          paddingBottom: '10px',
+                                          border: '1px solid #f4f4f4',
+                                      }}
+                                      onClick={() => handleNavigate(item?.link, item.id)}
                                   >
                                       {item.title}
                                   </Menu.Item>

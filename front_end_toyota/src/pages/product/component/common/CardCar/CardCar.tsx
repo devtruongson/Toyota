@@ -5,6 +5,7 @@ import { formatLink } from '../../../../../helpers/formatLink';
 import { routes } from '../../../../../constants/routes';
 import { useAppDispatch } from '../../../../../app/hooks';
 import { saveCurrentcar } from '../../../../../app/slices/appSlice';
+import { getLinkImage } from '../../../../../helpers/getLinkImage';
 
 type Props = {
     car: ICar;
@@ -24,7 +25,11 @@ const CardCar = ({ car }: Props) => {
         >
             <div className="overflow-hidden">
                 <img
-                    src={car?.car_features?.[0]?.image_url || defaultImageCar}
+                    src={
+                        car?.car_features?.[0]?.image_url
+                            ? getLinkImage(car?.car_features?.[0]?.image_url)
+                            : defaultImageCar
+                    }
                     alt="thumbnail"
                     className="transition-transform duration-300 ease-in-out transform hover:scale-110"
                 />

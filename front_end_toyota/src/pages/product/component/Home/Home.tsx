@@ -1,12 +1,12 @@
 import { HttpStatusCode } from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
+import { useAppSelector } from '../../../../app/hooks';
 import { bannerHomes, naviHome, reasonChooses } from '../../../../constants';
 import { colors } from '../../../../constants/colors';
 import { getAllBlogs } from '../../../../services/blogService';
-import { getAllCar } from '../../../../services/carService';
-import { IBlog, ICar } from '../../../../utils/interface';
+import { IBlog } from '../../../../utils/interface';
 import CardBlog from '../CardBlog/CardBlog';
 import CardCar from '../common/CardCar/CardCar';
 import './Home.css';
@@ -19,15 +19,19 @@ const Home = () => {
         slidesToScroll: 1,
     };
 
-    const [cars, setCars] = useState<ICar[]>([]);
     const [blogs, setBlogs] = useState<IBlog[]>([]);
+    const { carActive } = useAppSelector((state) => state);
+    const cars = useMemo(() => {
+        return {
+            electric: carActive.filter((item) => item.model === 'electric'),
+            gasoline: carActive.filter((item) => item.model !== 'electric'),
+        };
+    }, [carActive]);
 
     useEffect(() => {
         const fetch = async () => {
-            const [resCar, resBlog] = await Promise.all([getAllCar(1, 10, 'all'), getAllBlogs(1, 10)]);
-            if (resCar.code === HttpStatusCode.Ok) {
-                setCars(resCar.data.items);
-            }
+            const resBlog = await getAllBlogs(1, 10);
+
             if (resBlog.code === HttpStatusCode.Ok) {
                 setBlogs(resBlog.data.items);
             }
@@ -60,9 +64,9 @@ const Home = () => {
                 </div>
             </div>
 
-            <div className="w-full pb-[40px] pt-[20px] flex flex-col justify-center items-center bg-[white]">
+            <div className="w-full pb-[40px] pt-[20px] flex flex-col justify-center items-center bg-[white] mb-[100px]">
                 {/* danh sach xe dien */}
-                <div className="w-[60%] px-[15px] py-[10px]">
+                <div className="w-[60%] px-[15px] py-[10px] ">
                     <div className="w-[100%] flex justify-center items-center mb-[10px]">
                         <p className="uppercase font-[800] text-[28px] text-[#2c72c6] whitespace-nowrap mr-[20px]">
                             động cơ điện
@@ -70,8 +74,27 @@ const Home = () => {
                         <div className=" flex-grow border-[1px] border-solid border-[#2c72c6]"></div>
                     </div>
                     <div className="w-full grid grid-cols-3 gap-[20px]">
-                        {cars && cars.length > 0
-                            ? cars.map((car) => {
+                        {cars.electric && cars.electric.length > 0
+                            ? cars.electric.map((car) => {
+                                  return <CardCar key={car.id} car={car} />;
+                              })
+                            : null}
+                    </div>
+                </div>
+            </div>
+
+            <div className="w-full pb-[40px] pt-[20px] flex flex-col justify-center items-center bg-[white] ">
+                {/* danh sach xe dien */}
+                <div className="w-[60%] px-[15px] py-[10px] ">
+                    <div className="w-[100%] flex justify-center items-center mb-[10px]">
+                        <p className="uppercase font-[800] text-[28px] text-[#2c72c6] whitespace-nowrap mr-[20px]">
+                            động cơ xăng
+                        </p>
+                        <div className=" flex-grow border-[1px] border-solid border-[#2c72c6]"></div>
+                    </div>
+                    <div className="w-full grid grid-cols-3 gap-[20px]">
+                        {cars.gasoline && cars.gasoline.length > 0
+                            ? cars.gasoline.map((car) => {
                                   return <CardCar key={car.id} car={car} />;
                               })
                             : null}
