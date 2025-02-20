@@ -64,7 +64,9 @@ export default function BookingTablePage() {
                 <select
                     value={String(item.status)}
                     onChange={(e) => {
-                        handleChange(e, item.id);
+                        if (item.id) {
+                            handleChange(e, item.id);
+                        }
                     }}
                     className="bg-gray-50 border mb-5 border-gray-300 w-[400px] text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
                 >

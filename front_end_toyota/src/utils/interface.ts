@@ -161,6 +161,8 @@ export interface IBlog {
     meta_description: string;
     content: string;
     is_active: boolean;
+    cate_date?: ICate;
+    cate_id?: number;
 }
 
 export interface ICate {
@@ -178,6 +180,7 @@ export interface ICharging {
 }
 
 export interface IRegisterForm {
+    id?: number;
     user_id: number;
     car_id: number;
     note: string;

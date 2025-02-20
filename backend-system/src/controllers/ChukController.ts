@@ -93,12 +93,22 @@ class ChukController {
 
     async handleGetAllBlog(req: Request, res: Response) {
         try {
-            const query = {
+            const query: {
+                page: number;
+                pageSize: number;
+                cateId: number;
+                is_active?: boolean;
+            } = {
                 page: req.query.page ? parseInt(req.query.page.toString()) : 1,
                 pageSize: req.query.pageSize ? parseInt(req.query.pageSize.toString()) : 1,
-                is_active: req.query.is_acive === 'false' ? false : true,
                 cateId: Number(req.query.cateId),
             };
+
+            if (req.query.is_active) {
+                query.is_active = req.query.is_active === 'true';
+                console.log(req.query.is_active, req.query.is_active === 'true');
+            }
+
             const data = await ChukService.handleGetAllBlog(query);
             return res.status(httpStatus.OK).json(data);
         } catch (err) {

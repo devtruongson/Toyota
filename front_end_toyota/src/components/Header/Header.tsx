@@ -38,7 +38,6 @@ const Header = () => {
     const handleClose = () => {
         setVisible(false);
     };
-    const { cates } = useAppSelector((state) => state);
 
     const dispatch = useAppDispatch();
 

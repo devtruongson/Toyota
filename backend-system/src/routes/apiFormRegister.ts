@@ -9,6 +9,7 @@ const initApiFormRegister = (app: Express) => {
     router.get('/list', handleCheckTokenAdmin, FormRegisterController.handleGetAllForm);
     router.patch('/change-status', handleCheckTokenAdmin, FormRegisterController.handleUpdateStatus);
     router.post('/send-email', handleCheckTokenAdmin, FormRegisterController.handleSendEmail);
+    router.post('/send-email-all', handleCheckTokenAdmin, FormRegisterController.handleSendEmailAll);
     return app.use('/v1/form', router);
 };
 

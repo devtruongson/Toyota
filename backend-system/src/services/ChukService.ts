@@ -179,19 +179,23 @@ class ChukService {
         }
     }
 
-    async handleGetAllBlog(data: { page: number; pageSize: number; is_active: boolean; cateId: number }) {
+    async handleGetAllBlog(data: { page: number; pageSize: number; cateId: number; is_active?: boolean }) {
         try {
             let offset: number = (data.page - 1) * data.pageSize;
-            let whereCondition: any = {
-                is_active: data.is_active,
-            };
+            let whereCondition: any = {};
+
+            if (typeof data.is_active !== 'undefined') {
+                whereCondition['is_active'] = data.is_active;
+            }
 
             if (data.cateId) {
                 whereCondition['cate_id'] = data.cateId;
             }
 
             let { count, rows }: { count: number; rows: any } = await Blog.findAndCountAll({
-                where: whereCondition,
+                where: {
+                    ...whereCondition,
+                },
                 include: [
                     {
                         model: Cate,

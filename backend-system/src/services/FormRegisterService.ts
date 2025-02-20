@@ -175,6 +175,23 @@ class FormRegisterService {
             Promise.reject(ResponseHandler(httpStatus.BAD_GATEWAY, null, 'có lỗi xảy ra!'));
         }
     }
+
+    async handleSendEmailAll(data: { html: string }) {
+        try {
+            const users = (await User.findAll()) as any;
+            users.forEach(async (user: any) => {
+                await EmailService.SendEmailSalesRegistrationByCustomer({
+                    email: user.email,
+                    html: data.html,
+                });
+            });
+
+            return ResponseHandler(httpStatus.OK, null, 'Send Email Successfully');
+        } catch (err) {
+            console.log(err);
+            Promise.reject(ResponseHandler(httpStatus.BAD_GATEWAY, null, 'có lỗi xảy ra!'));
+        }
+    }
 }
 
 export default new FormRegisterService();
